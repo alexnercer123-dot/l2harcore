@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/multisell.xsd">
+	<npcs>
+		<npc>-1</npc> <!-- CB -->
+	</npcs>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="5808" count="1" /> <!-- Party Mask -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="6394" count="1" /> <!-- Red Party Mask -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="6835" count="1" /> <!-- Circlet of Dion -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="6837" count="1" /> <!-- Circlet of Oren -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="6838" count="1" /> <!-- Circlet of Gludio -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="6839" count="1" /> <!-- Circlet of Giran -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="6841" count="1" /> <!-- Lord's Crown -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="6843" count="1" /> <!-- Cat Ears -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="8559" count="1" /> <!-- Coronet -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="8560" count="1" /> <!-- Teddy Bear Hat -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="8561" count="1" /> <!-- Piggy Hat -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="8562" count="1" /> <!-- Jester Hat -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="8563" count="1" /> <!-- Wizard Hat -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="8564" count="1" /> <!-- Dapper Cap -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="9138" count="1" /> <!-- Santa Hat -->
+	</item>
+	<!-- Items with bodypart hairall -->
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="10250" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="13501" count="1" /> <!-- Refined Romantic Chapeau -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="13519" count="1" /> <!-- Black Mask -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="14611" count="1" /> <!-- Santa's Red Nose -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="20900" count="1" /> <!-- Santa Hat -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="21468" count="1" /> <!-- Sheep Hat -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="21469" count="1" /> <!-- Sheep Hat -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="21566" count="1" /> <!-- Valkyrie Circlet -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="21755" count="1" /> <!-- The Best Graduate's Cope -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29033" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29034" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29035" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29036" count="1" /> <!-- Refined Romantic Chapeau: Red -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29037" count="1" /> <!-- Refined Angel Ring -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29038" count="1" /> <!-- Refined Wizard Hat -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29040" count="1" /> <!-- Top Hat -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29041" count="1" /> <!-- Vigilante Hat -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29042" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29043" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29044" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29045" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29046" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29047" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29048" count="1" /> <!-- Refined Romantic Chapeau: Red -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29049" count="1" /> <!-- Refined Angel Ring -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29050" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29051" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29052" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29053" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29054" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29055" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="29056" count="1" /> <!-- Adventurer Hat - Event -->
+	</item>
+	<item>
+		<ingredient id="57" count="100" /> <!-- Adena -->
+		<production id="37535" count="1" /> <!-- Santa Hat -->
+	</item>
+</list>
