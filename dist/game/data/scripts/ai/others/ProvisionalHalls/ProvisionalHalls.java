@@ -48,11 +48,12 @@ public class ProvisionalHalls extends AbstractNpcAI
 	
 	// Misc
 	private static final int CURRENCY = 57;
-	private static final int HALL_PRICE = 50000000;
+	private static final int HALL_PRICE = 10000000;
 	private static final long TWO_WEEKS = 1209600000;
 	private static final Map<Integer, Location> CLAN_HALLS = new LinkedHashMap<>();
 	static
 	{
+		// Original halls (9)
 		CLAN_HALLS.put(187, new Location(-122200, -116552, -5798, 1779));
 		CLAN_HALLS.put(186, new Location(-122264, -122392, -5870, 15229));
 		CLAN_HALLS.put(188, new Location(-121864, -111240, -6014, 30268));
@@ -62,6 +63,29 @@ public class ProvisionalHalls extends AbstractNpcAI
 		CLAN_HALLS.put(193, new Location(-111717, -116550, -5773, 1779));
 		CLAN_HALLS.put(192, new Location(-111726, -122378, -5845, 15229));
 		CLAN_HALLS.put(194, new Location(-111158, -111230, -5989, 30268));
+		
+		// Additional halls to reach 27 total (18 more)
+		// Duplicate coordinates with slight variations to avoid exact overlaps
+		CLAN_HALLS.put(195, new Location(-122100, -116552, -5798, 1779));
+		CLAN_HALLS.put(196, new Location(-122164, -122392, -5870, 15229));
+		CLAN_HALLS.put(197, new Location(-121764, -111240, -6014, 30268));
+		CLAN_HALLS.put(198, new Location(-117180, -116551, -5771, 1779));
+		CLAN_HALLS.put(199, new Location(-116900, -122052, -5845, 15229));
+		CLAN_HALLS.put(200, new Location(-117174, -111237, -5989, 30268));
+		CLAN_HALLS.put(201, new Location(-111617, -116550, -5773, 1779));
+		CLAN_HALLS.put(202, new Location(-111626, -122378, -5845, 15229));
+		CLAN_HALLS.put(203, new Location(-111058, -111230, -5989, 30268));
+		
+		// More halls with further coordinate variations
+		CLAN_HALLS.put(204, new Location(-122300, -116652, -5798, 1779));
+		CLAN_HALLS.put(205, new Location(-122364, -122492, -5870, 15229));
+		CLAN_HALLS.put(206, new Location(-121964, -111340, -6014, 30268));
+		CLAN_HALLS.put(207, new Location(-116980, -116651, -5771, 1779));
+		CLAN_HALLS.put(208, new Location(-117100, -122152, -5845, 15229));
+		CLAN_HALLS.put(209, new Location(-116974, -111337, -5989, 30268));
+		CLAN_HALLS.put(210, new Location(-111817, -116650, -5773, 1779));
+		CLAN_HALLS.put(211, new Location(-111826, -122478, -5845, 15229));
+		CLAN_HALLS.put(212, new Location(-111258, -111330, -5989, 30268));
 	}
 	private static final String HALL_OWNER_VAR = "PCH_OWNER_";
 	private static final String HALL_TIME_VAR = "PCH_TIME_";
@@ -215,12 +239,25 @@ public class ProvisionalHalls extends AbstractNpcAI
 	{
 		final Calendar calendar = Calendar.getInstance();
 		final int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-		if ((dayOfWeek != Calendar.SATURDAY) && (dayOfWeek != Calendar.SUNDAY))
+		
+		// Count available clan halls
+		int availableHalls = 0;
+		for (int id : CLAN_HALLS.keySet())
 		{
-			return "33359-01.html";
+			if ((GlobalVariablesManager.getInstance().getInt(HALL_OWNER_VAR + id, 0) == 0) && ((GlobalVariablesManager.getInstance().getLong(HALL_TIME_VAR + id, 0) + TWO_WEEKS) < System.currentTimeMillis()))
+			{
+				availableHalls++;
+			}
 		}
 		
-		return "33359-01b.html";
+		// Return dynamic HTML with available halls count
+		String html = getHtm(player, "33359-01.html");
+		if (html != null)
+		{
+			html = html.replace("%available_halls%", String.valueOf(availableHalls));
+		}
+		
+		return html;
 	}
 	
 	public static void main(String[] args)
