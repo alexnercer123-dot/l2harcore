@@ -156,7 +156,7 @@ public class ProvisionalHalls extends AbstractNpcAI
 						.format(Instant.ofEpochMilli(leaseEndTime).atZone(ZoneId.systemDefault()));
 				}
 				
-				hallsInfo.append("<table width=300 border=0 bgcolor=\"000000\">");
+				hallsInfo.append("<table width=300 border=1>");
 				hallsInfo.append("<tr>");
 				hallsInfo.append("<td width=30 align=center>").append(hallNumber++).append(".</td>");
 				hallsInfo.append("<td width=100>").append("Hall ").append(id).append("</td>");

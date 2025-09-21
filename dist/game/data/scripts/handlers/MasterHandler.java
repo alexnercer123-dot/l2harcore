@@ -106,7 +106,6 @@ import handlers.admincommandhandlers.AdminMissingHtmls;
 import handlers.admincommandhandlers.AdminMobGroup;
 import handlers.admincommandhandlers.AdminOlympiad;
 import handlers.admincommandhandlers.AdminOnline;
-import handlers.admincommandhandlers.AdminPForge;
 import handlers.admincommandhandlers.AdminPathNode;
 import handlers.admincommandhandlers.AdminPcCafePoints;
 import handlers.admincommandhandlers.AdminPetition;
@@ -172,7 +171,7 @@ import handlers.chathandlers.ChatTrade;
 import handlers.chathandlers.ChatWhisper;
 import handlers.chathandlers.ChatWorld;
 import handlers.communityboard.ClanBoard;
-import handlers.communityboard.DropSearchBoard;
+import handlers.communityboard.ColorChangeBoard;
 import handlers.communityboard.FavoriteBoard;
 import handlers.communityboard.FriendsBoard;
 import handlers.communityboard.HallOfDeathBoard;
@@ -181,6 +180,7 @@ import handlers.communityboard.HomepageBoard;
 import handlers.communityboard.MailBoard;
 import handlers.communityboard.MemoBoard;
 import handlers.communityboard.RegionBoard;
+import handlers.communityboard.DropSearchBoard;
 import handlers.itemhandlers.Appearance;
 import handlers.itemhandlers.BeastSoulShot;
 import handlers.itemhandlers.BeastSpiritShot;
@@ -374,10 +374,10 @@ public class MasterHandler
 			AdminAugment.class,
 			AdminBuffs.class,
 			AdminCamera.class,
+			AdminCastle.class,
 			AdminChangeAccessLevel.class,
 			AdminClan.class,
 			AdminClanHall.class,
-			AdminCastle.class,
 			AdminCreateItem.class,
 			AdminCursedWeapons.class,
 			AdminDebug.class,
@@ -494,6 +494,7 @@ public class MasterHandler
 		{
 			// Community Board
 			ClanBoard.class,
+			ColorChangeBoard.class,
 			FavoriteBoard.class,
 			FriendsBoard.class,
 			HallOfDeathBoard.class,
