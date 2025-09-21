@@ -64,19 +64,14 @@ public class CommunityBoardHandler implements IHandler<IParseBoardHandler, Strin
 	@Override
 	public IParseBoardHandler getHandler(String cmd)
 	{
-		String lowerCmd = cmd.toLowerCase();
-		// Check for exact match first
-		if (_datatable.containsKey(lowerCmd))
+		for (IParseBoardHandler cb : _datatable.values())
 		{
-			return _datatable.get(lowerCmd);
-		}
-		
-		// Check for prefix matches
-		for (Map.Entry<String, IParseBoardHandler> entry : _datatable.entrySet())
-		{
-			if (lowerCmd.startsWith(entry.getKey()))
+			for (String command : cb.getCommandList())
 			{
-				return entry.getValue();
+				if (cmd.toLowerCase().startsWith(command.toLowerCase()))
+				{
+					return cb;
+				}
 			}
 		}
 		
