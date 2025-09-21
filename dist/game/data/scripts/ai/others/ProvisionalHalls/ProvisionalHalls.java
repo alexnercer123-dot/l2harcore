@@ -20,11 +20,15 @@
  */
 package ai.others.ProvisionalHalls;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.l2jmobius.gameserver.data.sql.ClanTable;
 import org.l2jmobius.gameserver.data.xml.ClanHallData;
 import org.l2jmobius.gameserver.data.xml.ItemData;
 import org.l2jmobius.gameserver.managers.GlobalVariablesManager;
@@ -114,9 +118,64 @@ public class ProvisionalHalls extends AbstractNpcAI
 	public String onEvent(String event, Npc npc, Player player)
 	{
 		String htmltext = null;
-		if (event.equals("33359-01.html") || event.equals("33359-02.html") || event.equals("33359-03.html"))
+		if (event.equals("33359-01.html") || event.equals("33359-02.html") || event.equals("33359-03.html") || event.equals("33359-04.html"))
 		{
 			htmltext = event;
+		}
+		else if (event.equals("showHallsInfo"))
+		{
+			if ((npc == null) || (npc.getId() != KERRY))
+			{
+				return null;
+			}
+			
+			// Generate the clan halls information
+			StringBuilder hallsInfo = new StringBuilder();
+			int hallNumber = 1;
+			
+			for (int id : CLAN_HALLS.keySet())
+			{
+				int ownerId = GlobalVariablesManager.getInstance().getInt(HALL_OWNER_VAR + id, 0);
+				long leaseEndTime = GlobalVariablesManager.getInstance().getLong(HALL_TIME_VAR + id, 0) + TWO_WEEKS;
+				
+				String clanName = "None";
+				String leaderName = "None";
+				String leaseExpiry = "N/A";
+				
+				if (ownerId > 0)
+				{
+					Clan clan = ClanTable.getInstance().getClan(ownerId);
+					if (clan != null)
+					{
+						clanName = clan.getName();
+						leaderName = clan.getLeaderName();
+					}
+					
+					// Format the lease expiration time
+					leaseExpiry = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+						.format(Instant.ofEpochMilli(leaseEndTime).atZone(ZoneId.systemDefault()));
+				}
+				
+				hallsInfo.append("<table width=300 border=0 bgcolor=\"000000\">");
+				hallsInfo.append("<tr>");
+				hallsInfo.append("<td width=30 align=center>").append(hallNumber++).append(".</td>");
+				hallsInfo.append("<td width=100>").append("Hall ").append(id).append("</td>");
+				hallsInfo.append("<td width=100>").append(clanName).append("</td>");
+				hallsInfo.append("<td width=100>").append(leaderName).append("</td>");
+				hallsInfo.append("<td width=120>").append(leaseExpiry).append("</td>");
+				hallsInfo.append("</tr>");
+				hallsInfo.append("</table>");
+			}
+			
+			// Return the dynamic HTML with halls information
+			String html = getHtm(player, "33359-04.html");
+			if (html != null)
+			{
+				html = html.replace("%halls_info%", hallsInfo.toString());
+				return html;
+			}
+			
+			return null;
 		}
 		else if (event.equals("buy"))
 		{
