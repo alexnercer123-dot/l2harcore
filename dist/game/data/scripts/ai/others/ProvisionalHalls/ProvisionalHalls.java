@@ -175,7 +175,29 @@ public class ProvisionalHalls extends AbstractNpcAI
 				return html;
 			}
 			
-			return null;
+			// Fallback if HTML file is not found
+			StringBuilder fallbackHtml = new StringBuilder();
+			fallbackHtml.append("<html><body><br><br><br>");
+			fallbackHtml.append("<center>");
+			fallbackHtml.append("Provisional Clan Halls Information<br>");
+			fallbackHtml.append("<br>");
+			fallbackHtml.append("<table width=300 border=0 bgcolor=\"000000\">");
+			fallbackHtml.append("<tr>");
+			fallbackHtml.append("<td width=30 align=center>No.</td>");
+			fallbackHtml.append("<td width=100>Clan Hall</td>");
+			fallbackHtml.append("<td width=100>Owner Clan</td>");
+			fallbackHtml.append("<td width=100>Clan Leader</td>");
+			fallbackHtml.append("<td width=120>Lease Expiry</td>");
+			fallbackHtml.append("</tr>");
+			fallbackHtml.append("</table>");
+			fallbackHtml.append("<br>");
+			fallbackHtml.append(hallsInfo.toString());
+			fallbackHtml.append("<br>");
+			fallbackHtml.append("<button action=\"bypass -h Quest ProvisionalHalls 33359-01.html\" value=\"Back\" width=180 height=27 back=\"L2UI_CT1.Button_DF_Down\" fore=\"L2UI_CT1.Button_DF\">");
+			fallbackHtml.append("</center>");
+			fallbackHtml.append("</body></html>");
+			
+			return fallbackHtml.toString();
 		}
 		else if (event.equals("buy"))
 		{
@@ -289,7 +311,7 @@ public class ProvisionalHalls extends AbstractNpcAI
 				GlobalVariablesManager.getInstance().remove(HALL_OWNER_VAR + id);
 			}
 		}
-		
+	
 		return htmltext;
 	}
 	
