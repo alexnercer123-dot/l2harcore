@@ -3,7 +3,7 @@
 	<spawn name="FakePlayers">
 		<group>
 			<npc id="80000" x="83485" y="147998" z="-3407" heading="23509" respawnTime="60sec" /> <!-- Evi -->
-			<npc id="80001" x="45873" y="49288" z="-3064" heading="0" respawnTime="30sec" /> <!-- Aelien - Level 1 Elf Warrior -->
+			<npc id="80001" x="46127" y="41339" z="-3535" heading="0" respawnTime="30sec" /> <!-- Aelien - Level 1 Elf Warrior -->
 		</group>
 	</spawn>
 </list>

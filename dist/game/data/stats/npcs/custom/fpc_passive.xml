@@ -24,4 +24,27 @@
 			<height normal="24" />
 		</collision>
 	</npc>
+	<!-- Level 1 Elf Warrior Fake Player -->
+	<npc id="80001" level="1" type="Monster" name="Aelien" isAggressive="true" aggroRange="300">
+		<race>ELF</race>
+		<sex>MALE</sex>
+		<stats str="40" int="25" dex="30" wit="20" con="40" men="20">
+			<vitals hp="150" hpRegen="2.0" mp="100" mpRegen="1.0" />
+			<attack physical="10" magical="5" random="5" critical="5" accuracy="5" attackSpeed="300" type="FIST" range="40" distance="80" width="120" />
+			<defence physical="50" magical="50" />
+			<attribute>
+				<defence fire="10" water="10" wind="10" earth="10" holy="10" dark="10" />
+			</attribute>
+			<speed>
+				<walk ground="85" />
+				<run ground="120" />
+			</speed>
+		</stats>
+		<status talkable="true" randomAnimation="true" randomWalk="true" undying="false" attackable="true" />
+		<fakePlayer classId="18" hair="1" hairColor="1" face="1" equipRHand="244" />
+		<collision>
+			<radius normal="7.5" />
+			<height normal="24" />
+		</collision>
+	</npc>
 </list>
