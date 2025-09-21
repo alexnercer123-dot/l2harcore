@@ -75,6 +75,8 @@ public class HallOfDeathBoard implements IParseBoardHandler
 			{
 				returnHtml = returnHtml.replace("%recent_deaths%", recentDeathsHtml.toString());
 				returnHtml = returnHtml.replace("%total_deaths%", String.valueOf(HallOfDeathTable.getTotalDeathCount()));
+				// Remove navigation placeholder when in Hall of Death pages
+				returnHtml = returnHtml.replace("%navigation%", "");
 			}
 		}
 		else if (command.startsWith("_bbshallofdeath;"))
@@ -96,10 +98,16 @@ public class HallOfDeathBoard implements IParseBoardHandler
 			{
 				returnHtml = generateAllDeathsPage(page);
 			}
+			
+			// Remove navigation placeholder when in Hall of Death pages
+			if (returnHtml != null)
+			{
+				returnHtml = returnHtml.replace("%navigation%", "");
+			}
 		}
 		
-		// Replace navigation if custom CB is enabled
-		if ((returnHtml != null) && (navigation != null))
+		// Replace navigation only for main community board pages, not Hall of Death pages
+		if ((returnHtml != null) && (navigation != null) && !command.startsWith("_bbshallofdeath"))
 		{
 			returnHtml = returnHtml.replace("%navigation%", navigation);
 		}

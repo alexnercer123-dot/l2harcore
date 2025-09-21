@@ -115,7 +115,7 @@ public class ColorChangeBoard implements IParseBoardHandler
 				return true;
 			}
 		}
-		else if (command.equals("_bbscolor"))
+		else if (command.equals("_bbscolor") || command.startsWith("_bbscolor "))
 		{
 			// Show the color selection page
 			String html = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/color_change/main.html");
@@ -125,7 +125,7 @@ public class ColorChangeBoard implements IParseBoardHandler
 				return true;
 			}
 		}
-		
+	
 		return false;
 	}
 }
