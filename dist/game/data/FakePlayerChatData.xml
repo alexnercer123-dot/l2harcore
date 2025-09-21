@@ -21,4 +21,9 @@
 	<fakePlayerChat fpcName="Evi" searchMethod="CONTAINS" searchText="is th;server;good" answers="it's good :D;i like it :P;yes it is :)" />
 	<fakePlayerChat fpcName="Evi" searchMethod="CONTAINS" searchText="where;you;go;?" answers="i look for something;checking stuff;looking for curius people :P" />
 	<fakePlayerChat fpcName="Evi" searchMethod="CONTAINS" searchText="are;you;kidding" answers="^^;:D;:P" />
+	<!-- Chat responses for our new Elf Warrior fake player -->
+	<fakePlayerChat fpcName="Aelien" searchMethod="EQUALS" searchText="hello" answers="Greetings, traveler!;Hello there!;Hi!" />
+	<fakePlayerChat fpcName="Aelien" searchMethod="EQUALS" searchText="help" answers="I'm just a beginner myself, but I'll do my best!;I'm training here, maybe we can help each other." />
+	<fakePlayerChat fpcName="Aelien" searchMethod="STARTS_WITH" searchText="how are you" answers="I'm training hard!;Getting stronger every day!;Feeling good, thanks!" />
+	<fakePlayerChat fpcName="Aelien" searchMethod="CONTAINS" searchText="monster;around" answers="Yes, there are monsters nearby. I've been fighting them to improve my skills!;I'm keeping this area safe from monsters." />
 </list>
