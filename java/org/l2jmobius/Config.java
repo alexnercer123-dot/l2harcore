@@ -160,6 +160,7 @@ public class Config
 	private static final String CUSTOM_VIP_CONFIG_FILE = "./config/Custom/VipSystem.ini";
 	private static final String CUSTOM_WALKER_BOT_PROTECTION_CONFIG_FILE = "./config/Custom/WalkerBotProtection.ini";
 	private static final String CUSTOM_WEDDING_CONFIG_FILE = "./config/Custom/Wedding.ini";
+	private static final String CUSTOM_PERMANENT_DEATH_CONFIG_FILE = "./config/Custom/PermanentDeath.ini";
 	private static final String AUTOBOT_CONFIG_FILE = "./config/Autobot.ini";
 	
 	// --------------------------------------------------
@@ -756,6 +757,17 @@ public class Config
 	public static boolean CUSTOM_ITEMS_LOAD;
 	public static boolean CUSTOM_MULTISELL_LOAD;
 	public static boolean CUSTOM_BUYLIST_LOAD;
+	
+	// --------------------------------------------------
+	// Custom - Permanent Death
+	// --------------------------------------------------
+	public static boolean PERMANENT_DEATH_ENABLED;
+	public static boolean PERMANENT_DEATH_MONSTER_ENABLED;
+	public static boolean PERMANENT_DEATH_NPC_ENABLED;
+	public static boolean PERMANENT_DEATH_RAIDBOSS_ENABLED;
+	public static boolean PERMANENT_DEATH_GRANDBOSS_ENABLED;
+	public static boolean PERMANENT_DEATH_PEACE_ZONE_ENABLED;
+	public static boolean PERMANENT_DEATH_SIEGE_ZONE_ENABLED;
 	public static int BOOKMARK_CONSUME_ITEM_ID;
 	public static boolean BOTREPORT_ENABLE;
 	public static String[] BOTREPORT_RESETPOINT_HOUR;
@@ -3954,6 +3966,18 @@ public class Config
 			// --------------------------------------------------
 			final ConfigReader walkerBotProtectionConfig = new ConfigReader(CUSTOM_WALKER_BOT_PROTECTION_CONFIG_FILE);
 			L2WALKER_PROTECTION = walkerBotProtectionConfig.getBoolean("L2WalkerProtection", false);
+			
+			// --------------------------------------------------
+			// Custom - Permanent Death
+			// --------------------------------------------------
+			final ConfigReader permanentDeathConfig = new ConfigReader(CUSTOM_PERMANENT_DEATH_CONFIG_FILE);
+			PERMANENT_DEATH_ENABLED = permanentDeathConfig.getBoolean("EnablePermanentDeath", true);
+			PERMANENT_DEATH_MONSTER_ENABLED = permanentDeathConfig.getBoolean("EnableMonsterPermanentDeath", true);
+			PERMANENT_DEATH_NPC_ENABLED = permanentDeathConfig.getBoolean("EnableNpcPermanentDeath", true);
+			PERMANENT_DEATH_RAIDBOSS_ENABLED = permanentDeathConfig.getBoolean("EnableRaidBossPermanentDeath", true);
+			PERMANENT_DEATH_GRANDBOSS_ENABLED = permanentDeathConfig.getBoolean("EnableGrandBossPermanentDeath", true);
+			PERMANENT_DEATH_PEACE_ZONE_ENABLED = permanentDeathConfig.getBoolean("EnablePeaceZonePermanentDeath", false);
+			PERMANENT_DEATH_SIEGE_ZONE_ENABLED = permanentDeathConfig.getBoolean("EnableSiegeZonePermanentDeath", false);
 			
 			// --------------------------------------------------
 			// Custom - Wedding

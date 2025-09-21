@@ -14869,6 +14869,12 @@ public class Player extends Playable
 	 */
 	private void handlePermanentDeath(Creature killer)
 	{
+		// Check if permanent death system is enabled
+		if (!Config.PERMANENT_DEATH_ENABLED)
+		{
+			return;
+		}
+		
 		if (killer == null)
 		{
 			return;
@@ -14877,6 +14883,73 @@ public class Player extends Playable
 		// Check if killer is not a player (i.e., PvE death)
 		if (!killer.isPlayable())
 		{
+			// Check if player is in a peaceful zone (town/city)
+			if (isInsideZone(ZoneId.PEACE))
+			{
+				// Check if permanent death in peaceful zones is enabled
+				if (!Config.PERMANENT_DEATH_PEACE_ZONE_ENABLED)
+				{
+					LOGGER.info("[HARDCORE] Player " + getName() + " died in a peaceful zone from " + killer.getName() + " - no permanent death (peace zone deaths disabled)");
+					return;
+				}
+			}
+			
+			// Check if player is in a siege zone
+			if (isInsideZone(ZoneId.SIEGE))
+			{
+				// Check if permanent death in siege zones is enabled
+				if (!Config.PERMANENT_DEATH_SIEGE_ZONE_ENABLED)
+				{
+					LOGGER.info("[HARDCORE] Player " + getName() + " died in a siege zone from " + killer.getName() + " - no permanent death (siege zone deaths disabled)");
+					return;
+				}
+			}
+			
+			// Determine killer type and check if that type of death should be permanent
+			if (killer.isMonster())
+			{
+				if (killer.isRaid())
+				{
+					// Check if it's a Grand Boss or regular Raid Boss
+					if (killer.getInstanceType() == InstanceType.GrandBoss)
+					{
+						// Check if Grand Boss deaths should be permanent
+						if (!Config.PERMANENT_DEATH_GRANDBOSS_ENABLED)
+						{
+							LOGGER.info("[HARDCORE] Player " + getName() + " died from Grand Boss " + killer.getName() + " - no permanent death (Grand Boss deaths disabled)");
+							return;
+						}
+					}
+					else
+					{
+						// Check if Raid Boss deaths should be permanent
+						if (!Config.PERMANENT_DEATH_RAIDBOSS_ENABLED)
+						{
+							LOGGER.info("[HARDCORE] Player " + getName() + " died from Raid Boss " + killer.getName() + " - no permanent death (Raid Boss deaths disabled)");
+							return;
+						}
+					}
+				}
+				else
+				{
+					// Check if Monster deaths should be permanent
+					if (!Config.PERMANENT_DEATH_MONSTER_ENABLED)
+					{
+						LOGGER.info("[HARDCORE] Player " + getName() + " died from Monster " + killer.getName() + " - no permanent death (Monster deaths disabled)");
+						return;
+					}
+				}
+			}
+			else if (killer.isNpc())
+			{
+				// Check if NPC deaths should be permanent
+				if (!Config.PERMANENT_DEATH_NPC_ENABLED)
+				{
+					LOGGER.info("[HARDCORE] Player " + getName() + " died from NPC " + killer.getName() + " - no permanent death (NPC deaths disabled)");
+					return;
+				}
+			}
+			
 			// Determine killer type and location
 			String killerType = "Monster";
 			String deathLocation = "Unknown";
