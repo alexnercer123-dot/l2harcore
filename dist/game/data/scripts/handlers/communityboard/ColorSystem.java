@@ -70,8 +70,9 @@ public class ColorSystem implements IWriteBoardHandler
 	{
 		LOGGER.info("ColorSystem onCommand called with: " + command + " by player: " + player.getName());
 		
-		if (command.equals("_bbscolorsystem"))
+		if (command.equals("_bbscolorsystem") || command.startsWith("_bbscolorsystem "))
 		{
+			LOGGER.info("ColorSystem: Showing color system page");
 			showColorSystemPage(player);
 			return true;
 		}
@@ -104,6 +105,10 @@ public class ColorSystem implements IWriteBoardHandler
 		{
 			switch (arg1)
 			{
+				case "test_write":
+					LOGGER.info("ColorSystem: Test write command received! arg2: " + arg2);
+					player.sendMessage("Test write successful! Color received: " + arg2);
+					return true;
 				case "preview_nick":
 					LOGGER.info("ColorSystem: Processing preview_nick with color: " + arg2);
 					if (arg2 == null || arg2.trim().isEmpty())
