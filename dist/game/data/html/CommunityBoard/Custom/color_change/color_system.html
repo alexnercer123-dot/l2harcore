@@ -1,7 +1,9 @@
 <html noscrollbar>
 <body>
 	<center>
-		<!-- Header -->
+		<!-- ========================================= -->
+		<!-- HEADER SECTION -->
+		<!-- ========================================= -->
 		<table border=0 cellpadding=0 cellspacing=0 width=555 height=80 background="L2UI_CT1.Windows_DF_TooltipBG">
 			<tr>
 				<td align="center" valign="middle">
@@ -12,14 +14,14 @@
 			</tr>
 		</table>
 		
-		<!-- Spacing -->
+		<!-- SPACING -->
 		<table border=0 cellpadding=0 cellspacing=0 width=555>
-			<tr>
-				<td height=10></td>
-			</tr>
+			<tr><td height=10></td></tr>
 		</table>
 		
-		<!-- Navigation -->
+		<!-- ========================================= -->
+		<!-- NAVIGATION SECTION -->
+		<!-- ========================================= -->
 		<table border=0 cellpadding=5 cellspacing=0 width=555 background="L2UI_CT1.Windows_DF_TooltipBG">
 			<tr>
 				<td align="center">
@@ -28,29 +30,26 @@
 			</tr>
 		</table>
 		
-		<!-- Spacing -->
+		<!-- SPACING -->
 		<table border=0 cellpadding=0 cellspacing=0 width=555>
-			<tr>
-				<td height=15></td>
-			</tr>
+			<tr><td height=15></td></tr>
 		</table>
 				
-		<!-- Nickname Color Section -->
+		<!-- ========================================= -->
+		<!-- NICKNAME COLOR SECTION -->
+		<!-- ========================================= -->
 		<table border=0 cellpadding=15 cellspacing=0 width=555 background="L2UI_CT1.Windows_DF_TooltipBG">
 			<tr>
 				<td align="center">
-					<font name="hs14" color="FFCC66">Nickname Color Customization</font>
+					<!-- Section Title -->
+					<font name="hs14" color="FFCC66">NICKNAME COLOR CUSTOMIZATION</font>
 					<br><br>
-					<font color="FFFFFF">Choose a preset color or enter custom HEX:</font>
+					<font color="FFFFFF">Choose any color to preview or purchase:</font>
 					<br><br>
 					
-					<!-- Custom HEX Input -->
-					<table border=0 cellpadding=5 cellspacing=0>
-						<tr>
-							<td colspan=4 align="center">
-								<font color="FFFFFF">Custom HEX Colors - Click to use:</font>
-							</td>
-						</tr>
+					<!-- PREMIUM COLORS -->
+					<font color="FFD700">Premium Colors:</font>
+					<table border=0 cellpadding=3 cellspacing=3>
 						<tr>
 							<td><button value="Gold" action="bypass _bbscolorsystem;preview_nick;FFD700" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
 							<td><button value="Silver" action="bypass _bbscolorsystem;preview_nick;C0C0C0" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
@@ -59,10 +58,9 @@
 						</tr>
 					</table>
 					<br>
-					<font color="FFB266">Examples: FF0000 (red), 00FF00 (green), 0000FF (blue)</font>
-					<br><br>
 					
-					<!-- Preset Colors for Preview -->
+					<!-- BASIC COLORS -->
+					<font color="AADDFF">Basic Colors:</font>
 					<table border=0 cellpadding=3 cellspacing=3>
 						<tr>
 							<td><button value="Red" action="bypass _bbscolorsystem;preview_nick;FF0000" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
@@ -79,66 +77,77 @@
 					</table>
 					<br>
 					
-					<!-- Purchase Buttons -->
-					<table border=0 cellpadding=8 cellspacing=5>
+					<!-- PURCHASE SECTION -->
+					<font color="FFCC66">Purchase Permanent Colors (1,000,000 Adena each):</font>
+					<br><br>
+					<table border=0 cellpadding=5 cellspacing=3>
 						<tr>
-							<td align="center" colspan=2>
-								<font color="AAAAAA">Click a color above to preview for FREE (10 seconds)</font>
+							<td align="center">
+								<button value="Buy Red" action="bypass _bbscolorsystem;buy_nick;FF0000" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Green" action="bypass _bbscolorsystem;buy_nick;00FF00" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Blue" action="bypass _bbscolorsystem;buy_nick;0000FF" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Yellow" action="bypass _bbscolorsystem;buy_nick;FFFF00" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 						</tr>
 						<tr>
 							<td align="center">
-								<button value="Buy Red (1M Adena)" action="bypass _bbscolorsystem;buy_nick;FF0000" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+								<button value="Buy Purple" action="bypass _bbscolorsystem;buy_nick;FF00FF" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 							<td align="center">
-								<button value="Buy Green (1M Adena)" action="bypass _bbscolorsystem;buy_nick;00FF00" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
-							</td>
-						</tr>
-						<tr>
-							<td align="center">
-								<button value="Buy Blue (1M Adena)" action="bypass _bbscolorsystem;buy_nick;0000FF" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+								<button value="Buy Cyan" action="bypass _bbscolorsystem;buy_nick;00FFFF" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 							<td align="center">
-								<button value="Buy Purple (1M Adena)" action="bypass _bbscolorsystem;buy_nick;FF00FF" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+								<button value="Buy Orange" action="bypass _bbscolorsystem;buy_nick;FF8000" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Pink" action="bypass _bbscolorsystem;buy_nick;FF69B4" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 						</tr>
 						<tr>
 							<td align="center">
-								<button value="Buy Gold (1M Adena)" action="bypass _bbscolorsystem;buy_nick;FFD700" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+								<button value="Buy Gold" action="bypass _bbscolorsystem;buy_nick;FFD700" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 							<td align="center">
-								<button value="Buy Silver (1M Adena)" action="bypass _bbscolorsystem;buy_nick;C0C0C0" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+								<button value="Buy Silver" action="bypass _bbscolorsystem;buy_nick;C0C0C0" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Lime" action="bypass _bbscolorsystem;buy_nick;32CD32" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Violet" action="bypass _bbscolorsystem;buy_nick;8A2BE2" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 						</tr>
 					</table>
 				</td>
 			</tr>
 		</table>
-				
 		
-		<!-- Spacing -->
+		<!-- SPACING -->
 		<table border=0 cellpadding=0 cellspacing=0 width=555>
-			<tr>
-				<td height=15></td>
-			</tr>
+			<tr><td height=15></td></tr>
 		</table>
 		
-		<!-- Title Color Section -->
+		<!-- ========================================= -->
+		<!-- TITLE COLOR SECTION -->
+		<!-- ========================================= -->
 		<table border=0 cellpadding=15 cellspacing=0 width=555 background="L2UI_CT1.Windows_DF_TooltipBG">
 			<tr>
 				<td align="center">
-					<font name="hs14" color="FFCC66">Title Color Customization</font>
+					<!-- Section Title -->
+					<font name="hs14" color="FFCC66">TITLE COLOR CUSTOMIZATION</font>
 					<br><br>
-					<font color="FFFFFF">Choose a preset color or enter custom HEX:</font>
+					<font color="FFFFFF">Choose any color to preview or purchase:</font>
 					<br><br>
 					
-					<!-- Custom HEX Input -->
-					<table border=0 cellpadding=5 cellspacing=0>
-						<tr>
-							<td colspan=4 align="center">
-								<font color="FFFFFF">Custom HEX Colors - Click to use:</font>
-							</td>
-						</tr>
+					<!-- PREMIUM COLORS -->
+					<font color="FFD700">Premium Colors:</font>
+					<table border=0 cellpadding=3 cellspacing=3>
 						<tr>
 							<td><button value="Gold" action="bypass _bbscolorsystem;preview_title;FFD700" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
 							<td><button value="Silver" action="bypass _bbscolorsystem;preview_title;C0C0C0" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
@@ -147,10 +156,9 @@
 						</tr>
 					</table>
 					<br>
-					<font color="FFB266">Examples: FF0000 (red), 00FF00 (green), 0000FF (blue)</font>
-					<br><br>
 					
-					<!-- Preset Colors for Preview -->
+					<!-- BASIC COLORS -->
+					<font color="AADDFF">Basic Colors:</font>
 					<table border=0 cellpadding=3 cellspacing=3>
 						<tr>
 							<td><button value="Red" action="bypass _bbscolorsystem;preview_title;FF0000" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
@@ -167,35 +175,50 @@
 					</table>
 					<br>
 					
-					<!-- Purchase Buttons -->
-					<table border=0 cellpadding=8 cellspacing=5>
+					<!-- PURCHASE SECTION -->
+					<font color="FFCC66">Purchase Permanent Colors (1,000,000 Adena each):</font>
+					<br><br>
+					<table border=0 cellpadding=5 cellspacing=3>
 						<tr>
-							<td align="center" colspan=2>
-								<font color="AAAAAA">Click a color above to preview for FREE (10 seconds)</font>
+							<td align="center">
+								<button value="Buy Red" action="bypass _bbscolorsystem;buy_title;FF0000" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Green" action="bypass _bbscolorsystem;buy_title;00FF00" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Blue" action="bypass _bbscolorsystem;buy_title;0000FF" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Yellow" action="bypass _bbscolorsystem;buy_title;FFFF00" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 						</tr>
 						<tr>
 							<td align="center">
-								<button value="Buy Red (1M Adena)" action="bypass _bbscolorsystem;buy_title;FF0000" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+								<button value="Buy Purple" action="bypass _bbscolorsystem;buy_title;FF00FF" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 							<td align="center">
-								<button value="Buy Green (1M Adena)" action="bypass _bbscolorsystem;buy_title;00FF00" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
-							</td>
-						</tr>
-						<tr>
-							<td align="center">
-								<button value="Buy Blue (1M Adena)" action="bypass _bbscolorsystem;buy_title;0000FF" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+								<button value="Buy Cyan" action="bypass _bbscolorsystem;buy_title;00FFFF" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 							<td align="center">
-								<button value="Buy Purple (1M Adena)" action="bypass _bbscolorsystem;buy_title;FF00FF" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+								<button value="Buy Orange" action="bypass _bbscolorsystem;buy_title;FF8000" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Pink" action="bypass _bbscolorsystem;buy_title;FF69B4" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 						</tr>
 						<tr>
 							<td align="center">
-								<button value="Buy Gold (1M Adena)" action="bypass _bbscolorsystem;buy_title;FFD700" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+								<button value="Buy Gold" action="bypass _bbscolorsystem;buy_title;FFD700" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 							<td align="center">
-								<button value="Buy Silver (1M Adena)" action="bypass _bbscolorsystem;buy_title;C0C0C0" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+								<button value="Buy Silver" action="bypass _bbscolorsystem;buy_title;C0C0C0" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Lime" action="bypass _bbscolorsystem;buy_title;32CD32" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Violet" action="bypass _bbscolorsystem;buy_title;8A2BE2" width=120 height=30 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 						</tr>
 					</table>
@@ -203,24 +226,26 @@
 			</tr>
 		</table>
 		
-		<!-- Spacing -->
+		<!-- SPACING -->
 		<table border=0 cellpadding=0 cellspacing=0 width=555>
-			<tr>
-				<td height=15></td>
-			</tr>
+			<tr><td height=15></td></tr>
 		</table>
 		
-		<!-- Instructions Section -->
+		<!-- ========================================= -->
+		<!-- INSTRUCTIONS SECTION -->
+		<!-- ========================================= -->
 		<table border=0 cellpadding=10 cellspacing=0 width=555 background="L2UI_CT1.Windows_DF_TooltipBG">
 			<tr>
 				<td align="center">
-					<font name="hs12" color="CDB67F">How It Works</font>
+					<font name="hs12" color="CDB67F">HOW IT WORKS</font>
 					<br><br>
 					<font color="FFFFFF">1. Click any color button to preview for 10 seconds (FREE)</font>
 					<br>
-					<font color="FFFFFF">2. Click "Buy" button for permanent color (1,000,000 Adena)</font>
+					<font color="FFFFFF">2. Click "Buy [Color]" button for permanent color (1,000,000 Adena)</font>
 					<br>
 					<font color="AAAAAA">Colors are saved permanently to your character</font>
+					<br><br>
+					<font color="FFB266">Color Codes: Red=FF0000, Green=00FF00, Blue=0000FF, Gold=FFD700</font>
 				</td>
 			</tr>
 		</table>
