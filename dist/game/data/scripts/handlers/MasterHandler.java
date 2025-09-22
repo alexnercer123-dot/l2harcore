@@ -173,6 +173,7 @@ import handlers.chathandlers.ChatWhisper;
 import handlers.chathandlers.ChatWorld;
 import handlers.communityboard.ClanBoard;
 import handlers.communityboard.ColorChangeBoard;
+import handlers.communityboard.ColorSystem;
 import handlers.communityboard.FavoriteBoard;
 import handlers.communityboard.FriendsBoard;
 import handlers.communityboard.HallOfDeathBoard;
@@ -496,6 +497,7 @@ public class MasterHandler
 			// Community Board
 			ClanBoard.class,
 			ColorChangeBoard.class,
+			ColorSystem.class,
 			FavoriteBoard.class,
 			FriendsBoard.class,
 			HallOfDeathBoard.class,

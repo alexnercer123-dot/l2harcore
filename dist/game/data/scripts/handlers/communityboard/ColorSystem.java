@@ -1,0 +1,383 @@
+/*
+ * Copyright (c) 2013 L2jMobius
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+package handlers.communityboard;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.l2jmobius.commons.database.DatabaseFactory;
+import org.l2jmobius.commons.threads.ThreadPool;
+import org.l2jmobius.gameserver.cache.HtmCache;
+import org.l2jmobius.gameserver.handler.CommunityBoardHandler;
+import org.l2jmobius.gameserver.handler.IWriteBoardHandler;
+import org.l2jmobius.gameserver.model.actor.Player;
+import org.l2jmobius.gameserver.model.item.enums.ItemProcessType;
+
+/**
+ * Simple and effective Color Change System for Community Board.
+ * Allows players to preview colors for free and buy them with Adena.
+ * Colors are stored in the database (characters table: name_color, title_color).
+ * 
+ * @author L2Hardcore
+ */
+public class ColorSystem implements IWriteBoardHandler
+{
+	private static final Logger LOGGER = Logger.getLogger(ColorSystem.class.getName());
+	
+	private static final String[] COMMANDS =
+	{
+		"_bbscolorsystem"
+	};
+	
+	private static final int COLOR_PRICE = 1000000; // 1,000,000 Adena
+	private static final int ADENA_ID = 57; // Adena item ID
+	private static final int PREVIEW_DURATION = 10000; // 10 seconds in milliseconds
+	
+	@Override
+	public String[] getCommandList()
+	{
+		return COMMANDS;
+	}
+	
+	@Override
+	public boolean onCommand(String command, Player player)
+	{
+		if (command.equals("_bbscolorsystem"))
+		{
+			showColorSystemPage(player);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean writeCommunityBoardCommand(Player player, String arg1, String arg2, String arg3, String arg4, String arg5)
+	{
+		if (arg1 == null)
+		{
+			return false;
+		}
+		
+		try
+		{
+			switch (arg1)
+			{
+				case "preview_nick":
+					return previewNickColor(player, arg2);
+				case "preview_title":
+					return previewTitleColor(player, arg2);
+				case "buy_nick":
+					return buyNickColor(player, arg2);
+				case "buy_title":
+					return buyTitleColor(player, arg2);
+				default:
+					return false;
+			}
+		}
+		catch (Exception e)
+		{
+			LOGGER.log(Level.WARNING, "Error in ColorSystem: " + e.getMessage(), e);
+			player.sendMessage("System error occurred. Please try again.");
+			return false;
+		}
+	}
+	
+	/**
+	 * Shows the main color system page
+	 */
+	private void showColorSystemPage(Player player)
+	{
+		final String html = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/color_change/color_system.html");
+		if (html != null)
+		{
+			CommunityBoardHandler.separateAndSend(html, player);
+		}
+		else
+		{
+			player.sendMessage("Color system page not found.");
+		}
+	}
+	
+	/**
+	 * Preview nickname color for free (10 seconds)
+	 */
+	private boolean previewNickColor(Player player, String hexColor)
+	{
+		if (!isValidHexColor(hexColor))
+		{
+			player.sendMessage("Invalid HEX color! Use format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
+			return false;
+		}
+		
+		try
+		{
+			final int colorValue = Integer.parseInt(hexColor, 16);
+			final int originalColor = player.getAppearance().getNameColor();
+			
+			// Apply preview color
+			player.getAppearance().setNameColor(colorValue);
+			player.broadcastUserInfo();
+			player.sendMessage("Previewing nickname color #" + hexColor.toUpperCase() + " for 10 seconds...");
+			
+			// Schedule revert to original color
+			ThreadPool.schedule(() -> {
+				player.getAppearance().setNameColor(originalColor);
+				player.broadcastUserInfo();
+				player.sendMessage("Nickname color preview ended.");
+			}, PREVIEW_DURATION);
+			
+			return true;
+		}
+		catch (NumberFormatException e)
+		{
+			player.sendMessage("Invalid HEX color format!");
+			return false;
+		}
+	}
+	
+	/**
+	 * Preview title color for free (10 seconds)
+	 */
+	private boolean previewTitleColor(Player player, String hexColor)
+	{
+		if (!isValidHexColor(hexColor))
+		{
+			player.sendMessage("Invalid HEX color! Use format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
+			return false;
+		}
+		
+		try
+		{
+			final int colorValue = Integer.parseInt(hexColor, 16);
+			final int originalColor = player.getAppearance().getTitleColor();
+			
+			// Apply preview color
+			player.getAppearance().setTitleColor(colorValue);
+			player.broadcastUserInfo();
+			player.sendMessage("Previewing title color #" + hexColor.toUpperCase() + " for 10 seconds...");
+			
+			// Schedule revert to original color
+			ThreadPool.schedule(() -> {
+				player.getAppearance().setTitleColor(originalColor);
+				player.broadcastUserInfo();
+				player.sendMessage("Title color preview ended.");
+			}, PREVIEW_DURATION);
+			
+			return true;
+		}
+		catch (NumberFormatException e)
+		{
+			player.sendMessage("Invalid HEX color format!");
+			return false;
+		}
+	}
+	
+	/**
+	 * Buy and permanently apply nickname color
+	 */
+	private boolean buyNickColor(Player player, String hexColor)
+	{
+		if (!isValidHexColor(hexColor))
+		{
+			player.sendMessage("Invalid HEX color! Use format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
+			return false;
+		}
+		
+		// Check if player has enough Adena
+		if (player.getInventory().getInventoryItemCount(ADENA_ID, -1) < COLOR_PRICE)
+		{
+			player.sendMessage("You need " + COLOR_PRICE + " Adena to buy this color!");
+			return false;
+		}
+		
+		try
+		{
+			final int colorValue = Integer.parseInt(hexColor, 16);
+			
+			// Take Adena from player
+			if (!player.destroyItemByItemId(ItemProcessType.FEE, ADENA_ID, COLOR_PRICE, player, true))
+			{
+				player.sendMessage("Failed to take payment. Transaction cancelled.");
+				return false;
+			}
+			
+			// Apply color permanently
+			player.getAppearance().setNameColor(colorValue);
+			player.broadcastUserInfo();
+			
+			// Save to database
+			if (saveNameColorToDatabase(player.getObjectId(), colorValue))
+			{
+				player.sendMessage("Nickname color changed permanently to #" + hexColor.toUpperCase() + "!");
+				player.sendMessage("Color has been saved to database.");
+			}
+			else
+			{
+				player.sendMessage("Warning: Color applied but database save failed. Contact administrator.");
+			}
+			
+			// Refresh the page
+			showColorSystemPage(player);
+			return true;
+		}
+		catch (NumberFormatException e)
+		{
+			player.sendMessage("Invalid HEX color format!");
+			return false;
+		}
+	}
+	
+	/**
+	 * Buy and permanently apply title color
+	 */
+	private boolean buyTitleColor(Player player, String hexColor)
+	{
+		if (!isValidHexColor(hexColor))
+		{
+			player.sendMessage("Invalid HEX color! Use format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
+			return false;
+		}
+		
+		// Check if player has enough Adena
+		if (player.getInventory().getInventoryItemCount(ADENA_ID, -1) < COLOR_PRICE)
+		{
+			player.sendMessage("You need " + COLOR_PRICE + " Adena to buy this color!");
+			return false;
+		}
+		
+		try
+		{
+			final int colorValue = Integer.parseInt(hexColor, 16);
+			
+			// Take Adena from player
+			if (!player.destroyItemByItemId(ItemProcessType.FEE, ADENA_ID, COLOR_PRICE, player, true))
+			{
+				player.sendMessage("Failed to take payment. Transaction cancelled.");
+				return false;
+			}
+			
+			// Apply color permanently
+			player.getAppearance().setTitleColor(colorValue);
+			player.broadcastUserInfo();
+			
+			// Save to database
+			if (saveTitleColorToDatabase(player.getObjectId(), colorValue))
+			{
+				player.sendMessage("Title color changed permanently to #" + hexColor.toUpperCase() + "!");
+				player.sendMessage("Color has been saved to database.");
+			}
+			else
+			{
+				player.sendMessage("Warning: Color applied but database save failed. Contact administrator.");
+			}
+			
+			// Refresh the page
+			showColorSystemPage(player);
+			return true;
+		}
+		catch (NumberFormatException e)
+		{
+			player.sendMessage("Invalid HEX color format!");
+			return false;
+		}
+	}
+	
+	/**
+	 * Validate HEX color format (6 characters, valid hex digits)
+	 */
+	private boolean isValidHexColor(String hexColor)
+	{
+		if (hexColor == null || hexColor.trim().isEmpty())
+		{
+			return false;
+		}
+		
+		// Remove spaces and convert to uppercase
+		hexColor = hexColor.trim().toUpperCase();
+		
+		// Remove # if present
+		if (hexColor.startsWith("#"))
+		{
+			hexColor = hexColor.substring(1);
+		}
+		
+		// Must be exactly 6 characters
+		if (hexColor.length() != 6)
+		{
+			return false;
+		}
+		
+		// Check if all characters are valid hex digits
+		for (int i = 0; i < hexColor.length(); i++)
+		{
+			final char c = hexColor.charAt(i);
+			if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Save nickname color to database
+	 */
+	private boolean saveNameColorToDatabase(int charId, int colorValue)
+	{
+		try (Connection con = DatabaseFactory.getConnection();
+			PreparedStatement ps = con.prepareStatement("UPDATE characters SET name_color = ? WHERE charId = ?"))
+		{
+			ps.setInt(1, colorValue);
+			ps.setInt(2, charId);
+			ps.executeUpdate();
+			return true;
+		}
+		catch (SQLException e)
+		{
+			LOGGER.log(Level.WARNING, "Failed to save name color to database for charId: " + charId, e);
+			return false;
+		}
+	}
+	
+	/**
+	 * Save title color to database
+	 */
+	private boolean saveTitleColorToDatabase(int charId, int colorValue)
+	{
+		try (Connection con = DatabaseFactory.getConnection();
+			PreparedStatement ps = con.prepareStatement("UPDATE characters SET title_color = ? WHERE charId = ?"))
+		{
+			ps.setInt(1, colorValue);
+			ps.setInt(2, charId);
+			ps.executeUpdate();
+			return true;
+		}
+		catch (SQLException e)
+		{
+			LOGGER.log(Level.WARNING, "Failed to save title color to database for charId: " + charId, e);
+			return false;
+		}
+	}
+}
