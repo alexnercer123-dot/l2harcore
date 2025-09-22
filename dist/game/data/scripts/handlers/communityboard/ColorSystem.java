@@ -69,11 +69,60 @@ public class ColorSystem implements IWriteBoardHandler
 	public boolean onCommand(String command, Player player)
 	{
 		LOGGER.info("ColorSystem onCommand called with: " + command + " by player: " + player.getName());
-		if (command.equals("_bbscolorsystem"))
+		
+		// Handle command parsing with semicolon parameters
+		if (command.startsWith("_bbscolorsystem"))
 		{
-			showColorSystemPage(player);
-			return true;
+			if (command.equals("_bbscolorsystem"))
+			{
+				// Main page
+				showColorSystemPage(player);
+				return true;
+			}
+			else if (command.contains(";"))
+			{
+				// Parse command with parameters: _bbscolorsystem;action;hex_color
+				String[] parts = command.split(";");
+				LOGGER.info("ColorSystem onCommand - Parsed parts: " + java.util.Arrays.toString(parts));
+				
+				if (parts.length >= 3)
+				{
+					String action = parts[1];
+					String hexColor = parts[2];
+					
+					LOGGER.info("ColorSystem onCommand - Action: " + action + ", HEX: " + hexColor);
+					
+					switch (action)
+					{
+						case "preview_nick":
+							return previewNickColor(player, hexColor);
+						case "preview_title":
+							return previewTitleColor(player, hexColor);
+						case "buy_nick":
+							return buyNickColor(player, hexColor);
+						case "buy_title":
+							return buyTitleColor(player, hexColor);
+						default:
+							LOGGER.warning("ColorSystem onCommand - Unknown action: " + action);
+							player.sendMessage("Unknown action: " + action);
+							return false;
+					}
+				}
+				else
+				{
+					LOGGER.warning("ColorSystem onCommand - Invalid command format: " + command);
+					player.sendMessage("Invalid command format. Expected: _bbscolorsystem;action;hex_color");
+					return false;
+				}
+			}
+			else
+			{
+				// Show main page for any other _bbscolorsystem command
+				showColorSystemPage(player);
+				return true;
+			}
 		}
+		
 		LOGGER.warning("ColorSystem command not recognized: " + command);
 		return false;
 	}
