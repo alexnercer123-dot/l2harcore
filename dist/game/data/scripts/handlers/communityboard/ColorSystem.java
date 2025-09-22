@@ -63,19 +63,24 @@ public class ColorSystem implements IWriteBoardHandler
 	@Override
 	public boolean onCommand(String command, Player player)
 	{
+		LOGGER.info("ColorSystem onCommand called with: " + command + " by player: " + player.getName());
 		if (command.equals("_bbscolorsystem"))
 		{
 			showColorSystemPage(player);
 			return true;
 		}
+		LOGGER.warning("ColorSystem command not recognized: " + command);
 		return false;
 	}
 	
 	@Override
 	public boolean writeCommunityBoardCommand(Player player, String arg1, String arg2, String arg3, String arg4, String arg5)
 	{
+		LOGGER.info("ColorSystem writeCommunityBoardCommand called - Player: " + player.getName() + ", arg1: " + arg1 + ", arg2: " + arg2);
+		
 		if (arg1 == null)
 		{
+			LOGGER.warning("ColorSystem writeCommunityBoardCommand: arg1 is null");
 			return false;
 		}
 		
@@ -84,20 +89,25 @@ public class ColorSystem implements IWriteBoardHandler
 			switch (arg1)
 			{
 				case "preview_nick":
+					LOGGER.info("ColorSystem: Processing preview_nick with color: " + arg2);
 					return previewNickColor(player, arg2);
 				case "preview_title":
+					LOGGER.info("ColorSystem: Processing preview_title with color: " + arg2);
 					return previewTitleColor(player, arg2);
 				case "buy_nick":
+					LOGGER.info("ColorSystem: Processing buy_nick with color: " + arg2);
 					return buyNickColor(player, arg2);
 				case "buy_title":
+					LOGGER.info("ColorSystem: Processing buy_title with color: " + arg2);
 					return buyTitleColor(player, arg2);
 				default:
+					LOGGER.warning("ColorSystem: Unknown command: " + arg1);
 					return false;
 			}
 		}
 		catch (Exception e)
 		{
-			LOGGER.log(Level.WARNING, "Error in ColorSystem: " + e.getMessage(), e);
+			LOGGER.log(Level.SEVERE, "ColorSystem ERROR - Player: " + player.getName() + ", Command: " + arg1 + ", Error: " + e.getMessage(), e);
 			player.sendMessage("System error occurred. Please try again.");
 			return false;
 		}
@@ -108,13 +118,16 @@ public class ColorSystem implements IWriteBoardHandler
 	 */
 	private void showColorSystemPage(Player player)
 	{
+		LOGGER.info("ColorSystem showColorSystemPage called for player: " + player.getName());
 		final String html = HtmCache.getInstance().getHtm(player, "data/html/CommunityBoard/Custom/color_change/color_system.html");
 		if (html != null)
 		{
+			LOGGER.info("HTML file found, sending to player");
 			CommunityBoardHandler.separateAndSend(html, player);
 		}
 		else
 		{
+			LOGGER.warning("HTML file not found: data/html/CommunityBoard/Custom/color_change/color_system.html");
 			player.sendMessage("Color system page not found.");
 		}
 	}
@@ -124,8 +137,11 @@ public class ColorSystem implements IWriteBoardHandler
 	 */
 	private boolean previewNickColor(Player player, String hexColor)
 	{
+		LOGGER.info("ColorSystem previewNickColor - Player: " + player.getName() + ", HEX: " + hexColor);
+		
 		if (!isValidHexColor(hexColor))
 		{
+			LOGGER.warning("ColorSystem previewNickColor - Invalid HEX color: " + hexColor);
 			player.sendMessage("Invalid HEX color! Use format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
 			return false;
 		}
@@ -135,13 +151,18 @@ public class ColorSystem implements IWriteBoardHandler
 			final int colorValue = Integer.parseInt(hexColor, 16);
 			final int originalColor = player.getAppearance().getNameColor();
 			
+			LOGGER.info("ColorSystem previewNickColor - Original color: " + originalColor + ", New color: " + colorValue);
+			
 			// Apply preview color
 			player.getAppearance().setNameColor(colorValue);
 			player.broadcastUserInfo();
 			player.sendMessage("Previewing nickname color #" + hexColor.toUpperCase() + " for 10 seconds...");
 			
+			LOGGER.info("ColorSystem previewNickColor - Color applied, scheduling revert");
+			
 			// Schedule revert to original color
 			ThreadPool.schedule(() -> {
+				LOGGER.info("ColorSystem previewNickColor - Reverting color for player: " + player.getName());
 				player.getAppearance().setNameColor(originalColor);
 				player.broadcastUserInfo();
 				player.sendMessage("Nickname color preview ended.");
@@ -151,6 +172,7 @@ public class ColorSystem implements IWriteBoardHandler
 		}
 		catch (NumberFormatException e)
 		{
+			LOGGER.warning("ColorSystem previewNickColor - NumberFormatException for HEX: " + hexColor + ", Error: " + e.getMessage());
 			player.sendMessage("Invalid HEX color format!");
 			return false;
 		}
@@ -198,15 +220,22 @@ public class ColorSystem implements IWriteBoardHandler
 	 */
 	private boolean buyNickColor(Player player, String hexColor)
 	{
+		LOGGER.info("ColorSystem buyNickColor - Player: " + player.getName() + ", HEX: " + hexColor);
+		
 		if (!isValidHexColor(hexColor))
 		{
+			LOGGER.warning("ColorSystem buyNickColor - Invalid HEX color: " + hexColor);
 			player.sendMessage("Invalid HEX color! Use format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
 			return false;
 		}
 		
 		// Check if player has enough Adena
-		if (player.getInventory().getInventoryItemCount(ADENA_ID, -1) < COLOR_PRICE)
+		long adenaCount = player.getInventory().getInventoryItemCount(ADENA_ID, -1);
+		LOGGER.info("ColorSystem buyNickColor - Player has " + adenaCount + " Adena, requires " + COLOR_PRICE);
+		
+		if (adenaCount < COLOR_PRICE)
 		{
+			LOGGER.warning("ColorSystem buyNickColor - Insufficient Adena. Player has: " + adenaCount + ", needs: " + COLOR_PRICE);
 			player.sendMessage("You need " + COLOR_PRICE + " Adena to buy this color!");
 			return false;
 		}
@@ -214,26 +243,34 @@ public class ColorSystem implements IWriteBoardHandler
 		try
 		{
 			final int colorValue = Integer.parseInt(hexColor, 16);
+			LOGGER.info("ColorSystem buyNickColor - Parsed color value: " + colorValue);
 			
 			// Take Adena from player
+			LOGGER.info("ColorSystem buyNickColor - Attempting to destroy " + COLOR_PRICE + " Adena");
 			if (!player.destroyItemByItemId(ItemProcessType.FEE, ADENA_ID, COLOR_PRICE, player, true))
 			{
+				LOGGER.warning("ColorSystem buyNickColor - Failed to destroy Adena items");
 				player.sendMessage("Failed to take payment. Transaction cancelled.");
 				return false;
 			}
+			
+			LOGGER.info("ColorSystem buyNickColor - Adena destroyed successfully, applying color");
 			
 			// Apply color permanently
 			player.getAppearance().setNameColor(colorValue);
 			player.broadcastUserInfo();
 			
 			// Save to database
+			LOGGER.info("ColorSystem buyNickColor - Saving to database");
 			if (saveNameColorToDatabase(player.getObjectId(), colorValue))
 			{
+				LOGGER.info("ColorSystem buyNickColor - Database save successful");
 				player.sendMessage("Nickname color changed permanently to #" + hexColor.toUpperCase() + "!");
 				player.sendMessage("Color has been saved to database.");
 			}
 			else
 			{
+				LOGGER.warning("ColorSystem buyNickColor - Database save failed");
 				player.sendMessage("Warning: Color applied but database save failed. Contact administrator.");
 			}
 			
@@ -243,6 +280,7 @@ public class ColorSystem implements IWriteBoardHandler
 		}
 		catch (NumberFormatException e)
 		{
+			LOGGER.warning("ColorSystem buyNickColor - NumberFormatException for HEX: " + hexColor + ", Error: " + e.getMessage());
 			player.sendMessage("Invalid HEX color format!");
 			return false;
 		}
@@ -346,17 +384,19 @@ public class ColorSystem implements IWriteBoardHandler
 	 */
 	private boolean saveNameColorToDatabase(int charId, int colorValue)
 	{
+		LOGGER.info("ColorSystem saveNameColorToDatabase - CharId: " + charId + ", Color: " + colorValue);
 		try (Connection con = DatabaseFactory.getConnection();
 			PreparedStatement ps = con.prepareStatement("UPDATE characters SET name_color = ? WHERE charId = ?"))
 		{
 			ps.setInt(1, colorValue);
 			ps.setInt(2, charId);
-			ps.executeUpdate();
-			return true;
+			int rowsUpdated = ps.executeUpdate();
+			LOGGER.info("ColorSystem saveNameColorToDatabase - Rows updated: " + rowsUpdated);
+			return rowsUpdated > 0;
 		}
 		catch (SQLException e)
 		{
-			LOGGER.log(Level.WARNING, "Failed to save name color to database for charId: " + charId, e);
+			LOGGER.log(Level.SEVERE, "ColorSystem saveNameColorToDatabase - Failed to save name color for charId: " + charId + ", Error: " + e.getMessage(), e);
 			return false;
 		}
 	}

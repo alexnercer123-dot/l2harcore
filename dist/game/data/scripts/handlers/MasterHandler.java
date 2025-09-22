@@ -496,7 +496,7 @@ public class MasterHandler
 		{
 			// Community Board
 			ClanBoard.class,
-			ColorChangeBoard.class,
+			// ColorChangeBoard.class, // Disabled - using ColorSystem instead
 			ColorSystem.class,
 			FavoriteBoard.class,
 			FriendsBoard.class,
