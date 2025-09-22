@@ -392,7 +392,7 @@ public class Player extends Playable
 	private static final String DELETE_ITEM_REUSE_SAVE = "DELETE FROM character_item_reuse_save WHERE charId=?";
 	
 	// Character Character SQL String Definitions:
-	private static final String INSERT_CHARACTER = "INSERT INTO characters (account_name,charId,char_name,level,maxHp,curHp,maxCp,curCp,maxMp,curMp,face,hairStyle,hairColor,sex,exp,sp,reputation,fame,raidbossPoints,pvpkills,pkkills,clanid,race,classid,deletetime,cancraft,title,title_color,name_color,online,clan_privs,wantspeace,base_class,nobless,power_grade,vitality_points,createDate,lastAccess) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	private static final String INSERT_CHARACTER = "INSERT INTO characters (account_name,charId,char_name,level,maxHp,curHp,maxCp,curCp,maxMp,curMp,face,hairStyle,hairColor,sex,heading,x,y,z,exp,expBeforeDeath,sp,reputation,fame,raidbossPoints,pvpkills,pkkills,clanid,race,classid,base_class,transform_id,deletetime,cancraft,title,title_color,name_color,accesslevel,online,onlinetime,char_slot,lastAccess,clan_privs,wantspeace,power_grade,nobless,subpledge,lvl_joined_academy,apprentice,sponsor,clan_join_expiry_time,clan_create_expiry_time,bookmarkslot,vitality_points,createDate,language,faction,pccafe_points) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,face=?,hairStyle=?,hairColor=?,sex=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,reputation=?,fame=?,raidbossPoints=?,pvpkills=?,pkkills=?,clanid=?,race=?,classid=?,deletetime=?,title=?,title_color=?,name_color=?,online=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,nobless=?,power_grade=?,subpledge=?,lvl_joined_academy=?,apprentice=?,sponsor=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,bookmarkslot=?,vitality_points=?,language=?,faction=?,pccafe_points=? WHERE charId=?";
 	private static final String UPDATE_CHARACTER_ACCESS = "UPDATE characters SET accesslevel = ? WHERE charId = ?";
 	private static final String RESTORE_CHARACTER = "SELECT * FROM characters WHERE charId=?";
@@ -6819,29 +6819,49 @@ public class Player extends Playable
 			statement.setInt(12, _appearance.getHairStyle());
 			statement.setInt(13, _appearance.getHairColor());
 			statement.setInt(14, _appearance.isFemale() ? 1 : 0);
-			statement.setLong(15, getExp());
-			statement.setLong(16, getSp());
-			statement.setInt(17, getReputation());
-			statement.setInt(18, _fame);
-			statement.setInt(19, _raidbossPoints);
-			statement.setInt(20, _pvpKills);
-			statement.setInt(21, _pkKills);
-			statement.setInt(22, _clanId);
-			statement.setInt(23, getRace().ordinal());
-			statement.setInt(24, getPlayerClass().getId());
-			statement.setLong(25, _deleteTimer);
-			statement.setInt(26, hasDwarvenCraft() ? 1 : 0);
-			statement.setString(27, getTitle());
-			statement.setInt(28, _appearance.getTitleColor());
-			statement.setInt(29, isOnlineInt());
-			statement.setInt(30, _clanPrivileges.getMask());
-			statement.setInt(31, _wantsPeace);
-			statement.setInt(32, _baseClass);
-			statement.setInt(33, isNoble() ? 1 : 0);
-			statement.setLong(34, 0);
-			statement.setInt(35, PlayerStat.MIN_VITALITY_POINTS);
-			statement.setDate(36, new Date(_createDate.getTimeInMillis()));
-			statement.setLong(37, System.currentTimeMillis());
+			statement.setInt(15, getHeading());
+			statement.setInt(16, getX());
+			statement.setInt(17, getY());
+			statement.setInt(18, getZ());
+			statement.setLong(19, getExp());
+			statement.setLong(20, 0); // expBeforeDeath
+			statement.setLong(21, getSp());
+			statement.setInt(22, getReputation());
+			statement.setInt(23, _fame);
+			statement.setInt(24, _raidbossPoints);
+			statement.setInt(25, _pvpKills);
+			statement.setInt(26, _pkKills);
+			statement.setInt(27, _clanId);
+			statement.setInt(28, getRace().ordinal());
+			statement.setInt(29, getPlayerClass().getId());
+			statement.setInt(30, _baseClass);
+			statement.setInt(31, 0); // transform_id
+			statement.setLong(32, _deleteTimer);
+			statement.setInt(33, hasDwarvenCraft() ? 1 : 0);
+			statement.setString(34, getTitle());
+			statement.setInt(35, _appearance.getTitleColor());
+			statement.setInt(36, _appearance.getNameColor());
+			statement.setInt(37, getAccessLevel().getLevel()); // accesslevel
+			statement.setInt(38, isOnlineInt());
+			statement.setInt(39, 0); // onlinetime
+			statement.setInt(40, 0); // char_slot
+			statement.setLong(41, System.currentTimeMillis());
+			statement.setInt(42, _clanPrivileges.getMask());
+			statement.setInt(43, _wantsPeace);
+			statement.setInt(44, 0); // power_grade
+			statement.setInt(45, isNoble() ? 1 : 0);
+			statement.setInt(46, 0); // subpledge
+			statement.setInt(47, 0); // lvl_joined_academy
+			statement.setInt(48, 0); // apprentice
+			statement.setInt(49, 0); // sponsor
+			statement.setLong(50, 0); // clan_join_expiry_time
+			statement.setLong(51, 0); // clan_create_expiry_time
+			statement.setInt(52, 0); // bookmarkslot
+			statement.setInt(53, PlayerStat.MIN_VITALITY_POINTS);
+			statement.setDate(54, new Date(_createDate.getTimeInMillis()));
+			statement.setString(55, "en"); // language
+			statement.setInt(56, 0); // faction
+			statement.setInt(57, 0); // pccafe_points
 			statement.executeUpdate();
 		}
 		catch (Exception e)
