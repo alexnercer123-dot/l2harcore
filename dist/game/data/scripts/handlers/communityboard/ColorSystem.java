@@ -70,11 +70,81 @@ public class ColorSystem implements IWriteBoardHandler
 	{
 		LOGGER.info("ColorSystem onCommand called with: " + command + " by player: " + player.getName());
 		
-		if (command.equals("_bbscolorsystem") || command.startsWith("_bbscolorsystem "))
+		if (command.equals("_bbscolorsystem"))
 		{
 			LOGGER.info("ColorSystem: Showing color system page");
 			showColorSystemPage(player);
 			return true;
+		}
+		else if (command.startsWith("_bbscolorsystem;"))
+		{
+			// Handle bypass commands like _bbscolorsystem;preview_nick;FF0000
+			String[] parts = command.split(";");
+			LOGGER.info("ColorSystem: Processing bypass command parts: " + java.util.Arrays.toString(parts));
+			
+			if (parts.length >= 2)
+			{
+				String action = parts[1];
+				String hexColor = parts.length > 2 ? parts[2] : null;
+				
+				LOGGER.info("ColorSystem: Action: " + action + ", HEX: " + hexColor);
+				
+				switch (action)
+				{
+					case "test_action":
+						player.sendMessage("Test bypass action successful!");
+						return true;
+					case "preview_nick":
+						if (hexColor != null && !hexColor.trim().isEmpty())
+						{
+							return previewNickColor(player, hexColor.trim());
+						}
+						else
+						{
+							player.sendMessage("Please enter a color code!");
+							return false;
+						}
+					case "preview_title":
+						if (hexColor != null && !hexColor.trim().isEmpty())
+						{
+							return previewTitleColor(player, hexColor.trim());
+						}
+						else
+						{
+							player.sendMessage("Please enter a color code!");
+							return false;
+						}
+					case "buy_nick":
+						if (hexColor != null && !hexColor.trim().isEmpty())
+						{
+							return buyNickColor(player, hexColor.trim());
+						}
+						else
+						{
+							player.sendMessage("Please enter a color code!");
+							return false;
+						}
+					case "buy_title":
+						if (hexColor != null && !hexColor.trim().isEmpty())
+						{
+							return buyTitleColor(player, hexColor.trim());
+						}
+						else
+						{
+							player.sendMessage("Please enter a color code!");
+							return false;
+						}
+					default:
+						LOGGER.warning("ColorSystem: Unknown action: " + action);
+						player.sendMessage("Unknown action: " + action);
+						return false;
+				}
+			}
+			else
+			{
+				LOGGER.warning("ColorSystem: Invalid bypass command format: " + command);
+				return false;
+			}
 		}
 		
 		LOGGER.warning("ColorSystem command not recognized: " + command);
@@ -181,10 +251,25 @@ public class ColorSystem implements IWriteBoardHandler
 	{
 		LOGGER.info("ColorSystem previewNickColor - Player: " + player.getName() + ", HEX: " + hexColor);
 		
+		// Check for empty color
+		if (hexColor == null || hexColor.trim().isEmpty() || hexColor.equals("$nick_color"))
+		{
+			LOGGER.warning("ColorSystem previewNickColor - Empty or invalid HEX color: " + hexColor);
+			player.sendMessage("Please enter a valid HEX color code! Example: FF0000, 00FF00, 0000FF");
+			return false;
+		}
+		
+		// Clean the hex color
+		hexColor = hexColor.trim().toUpperCase();
+		if (hexColor.startsWith("#"))
+		{
+			hexColor = hexColor.substring(1);
+		}
+		
 		if (!isValidHexColor(hexColor))
 		{
 			LOGGER.warning("ColorSystem previewNickColor - Invalid HEX color: " + hexColor);
-			player.sendMessage("Invalid HEX color! Use format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
+			player.sendMessage("Invalid HEX color! Use 6-digit format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
 			return false;
 		}
 		
@@ -198,7 +283,7 @@ public class ColorSystem implements IWriteBoardHandler
 			// Apply preview color
 			player.getAppearance().setNameColor(colorValue);
 			player.broadcastUserInfo();
-			player.sendMessage("Previewing nickname color #" + hexColor.toUpperCase() + " for 10 seconds...");
+			player.sendMessage("Previewing nickname color #" + hexColor + " for 10 seconds...");
 			
 			LOGGER.info("ColorSystem previewNickColor - Color applied, scheduling revert");
 			
@@ -225,21 +310,37 @@ public class ColorSystem implements IWriteBoardHandler
 	 */
 	private boolean previewTitleColor(Player player, String hexColor)
 	{
+		LOGGER.info("ColorSystem previewTitleColor - Player: " + player.getName() + ", HEX: " + hexColor);
+		
+		// Check for empty color
+		if (hexColor == null || hexColor.trim().isEmpty() || hexColor.equals("$title_color"))
+		{
+			LOGGER.warning("ColorSystem previewTitleColor - Empty or invalid HEX color: " + hexColor);
+			player.sendMessage("Please enter a valid HEX color code! Example: FF0000, 00FF00, 0000FF");
+			return false;
+		}
+		
+		// Clean the hex color
+		hexColor = hexColor.trim().toUpperCase();
+		if (hexColor.startsWith("#"))
+		{
+			hexColor = hexColor.substring(1);
+		}
+		
 		if (!isValidHexColor(hexColor))
 		{
-			player.sendMessage("Invalid HEX color! Use format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
+			player.sendMessage("Invalid HEX color! Use 6-digit format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
 			return false;
 		}
 		
 		try
-		{
 			final int colorValue = Integer.parseInt(hexColor, 16);
 			final int originalColor = player.getAppearance().getTitleColor();
 			
 			// Apply preview color
 			player.getAppearance().setTitleColor(colorValue);
 			player.broadcastUserInfo();
-			player.sendMessage("Previewing title color #" + hexColor.toUpperCase() + " for 10 seconds...");
+			player.sendMessage("Previewing title color #" + hexColor + " for 10 seconds...");
 			
 			// Schedule revert to original color
 			ThreadPool.schedule(() -> {
@@ -264,10 +365,25 @@ public class ColorSystem implements IWriteBoardHandler
 	{
 		LOGGER.info("ColorSystem buyNickColor - Player: " + player.getName() + ", HEX: " + hexColor);
 		
+		// Check for empty color
+		if (hexColor == null || hexColor.trim().isEmpty() || hexColor.equals("$nick_color"))
+		{
+			LOGGER.warning("ColorSystem buyNickColor - Empty or invalid HEX color: " + hexColor);
+			player.sendMessage("Please enter a valid HEX color code! Example: FF0000, 00FF00, 0000FF");
+			return false;
+		}
+		
+		// Clean the hex color
+		hexColor = hexColor.trim().toUpperCase();
+		if (hexColor.startsWith("#"))
+		{
+			hexColor = hexColor.substring(1);
+		}
+		
 		if (!isValidHexColor(hexColor))
 		{
 			LOGGER.warning("ColorSystem buyNickColor - Invalid HEX color: " + hexColor);
-			player.sendMessage("Invalid HEX color! Use format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
+			player.sendMessage("Invalid HEX color! Use 6-digit format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
 			return false;
 		}
 		
@@ -333,9 +449,26 @@ public class ColorSystem implements IWriteBoardHandler
 	 */
 	private boolean buyTitleColor(Player player, String hexColor)
 	{
+		LOGGER.info("ColorSystem buyTitleColor - Player: " + player.getName() + ", HEX: " + hexColor);
+		
+		// Check for empty color
+		if (hexColor == null || hexColor.trim().isEmpty() || hexColor.equals("$title_color"))
+		{
+			LOGGER.warning("ColorSystem buyTitleColor - Empty or invalid HEX color: " + hexColor);
+			player.sendMessage("Please enter a valid HEX color code! Example: FF0000, 00FF00, 0000FF");
+			return false;
+		}
+		
+		// Clean the hex color
+		hexColor = hexColor.trim().toUpperCase();
+		if (hexColor.startsWith("#"))
+		{
+			hexColor = hexColor.substring(1);
+		}
+		
 		if (!isValidHexColor(hexColor))
 		{
-			player.sendMessage("Invalid HEX color! Use format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
+			player.sendMessage("Invalid HEX color! Use 6-digit format: FF0000 (red), 00FF00 (green), 0000FF (blue)");
 			return false;
 		}
 		
