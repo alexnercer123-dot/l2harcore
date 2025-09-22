@@ -34,40 +34,61 @@
 				<td height=15></td>
 			</tr>
 		</table>
-					
+				
 		<!-- Nickname Color Section -->
 		<table border=0 cellpadding=15 cellspacing=0 width=555 background="L2UI_CT1.Windows_DF_TooltipBG">
 			<tr>
 				<td align="center">
 					<font name="hs14" color="FFCC66">Nickname Color Customization</font>
 					<br><br>
-					<font color="FFFFFF">Enter HEX Color Code (without #):</font>
+					<font color="FFFFFF">Choose a color to preview or purchase:</font>
+					<br><br>
+					
+					<!-- Preset Colors for Preview -->
+					<table border=0 cellpadding=3 cellspacing=3>
+						<tr>
+							<td><button value="Red" action="bypass _bbscolorsystem;preview_nick;FF0000" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Green" action="bypass _bbscolorsystem;preview_nick;00FF00" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Blue" action="bypass _bbscolorsystem;preview_nick;0000FF" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Yellow" action="bypass _bbscolorsystem;preview_nick;FFFF00" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+						</tr>
+						<tr>
+							<td><button value="Purple" action="bypass _bbscolorsystem;preview_nick;FF00FF" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Cyan" action="bypass _bbscolorsystem;preview_nick;00FFFF" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Orange" action="bypass _bbscolorsystem;preview_nick;FF8000" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Pink" action="bypass _bbscolorsystem;preview_nick;FF69B4" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+						</tr>
+					</table>
 					<br>
-					<font color="FFB266">Examples: FF0000 (red), 00FF00 (green), 0000FF (blue)</font>
-					<br><br>
 					
-					<edit var="nick_color" width="150" height="20">
-					<br><br>
-					
-					<!-- Action Buttons -->
+					<!-- Purchase Buttons -->
 					<table border=0 cellpadding=8 cellspacing=5>
 						<tr>
+							<td align="center" colspan=2>
+								<font color="AAAAAA">Click a color above to preview for FREE (10 seconds)</font>
+							</td>
+						</tr>
+						<tr>
 							<td align="center">
-								<button value="Preview (Free)" action="bypass _bbscolorsystem;preview_nick;%nick_color" width=150 height=35 back="L2UI_CT1.HtmlWnd_DF_Level_Down" fore="L2UI_CT1.HtmlWnd_DF_Level">
-								<br>
-								<font size=1 color="99CCFF">Test for 10 seconds</font>
+								<button value="Buy Red (1M Adena)" action="bypass _bbscolorsystem;buy_nick;FF0000" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 							<td align="center">
-								<button value="Buy (1,000,000 Adena)" action="bypass _bbscolorsystem;buy_nick;%nick_color" width=170 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
-								<br>
-								<font size=1 color="FFD700">Permanent change</font>
+								<button value="Buy Green (1M Adena)" action="bypass _bbscolorsystem;buy_nick;00FF00" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+								<button value="Buy Blue (1M Adena)" action="bypass _bbscolorsystem;buy_nick;0000FF" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Purple (1M Adena)" action="bypass _bbscolorsystem;buy_nick;FF00FF" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 						</tr>
 					</table>
 				</td>
 			</tr>
 		</table>
-					
+				
 		
 		<!-- Spacing -->
 		<table border=0 cellpadding=0 cellspacing=0 width=555>
@@ -82,26 +103,47 @@
 				<td align="center">
 					<font name="hs14" color="FFCC66">Title Color Customization</font>
 					<br><br>
-					<font color="FFFFFF">Enter HEX Color Code (without #):</font>
+					<font color="FFFFFF">Choose a color to preview or purchase:</font>
+					<br><br>
+					
+					<!-- Preset Colors for Preview -->
+					<table border=0 cellpadding=3 cellspacing=3>
+						<tr>
+							<td><button value="Red" action="bypass _bbscolorsystem;preview_title;FF0000" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Green" action="bypass _bbscolorsystem;preview_title;00FF00" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Blue" action="bypass _bbscolorsystem;preview_title;0000FF" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Yellow" action="bypass _bbscolorsystem;preview_title;FFFF00" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+						</tr>
+						<tr>
+							<td><button value="Purple" action="bypass _bbscolorsystem;preview_title;FF00FF" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Cyan" action="bypass _bbscolorsystem;preview_title;00FFFF" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Orange" action="bypass _bbscolorsystem;preview_title;FF8000" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Pink" action="bypass _bbscolorsystem;preview_title;FF69B4" width=80 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+						</tr>
+					</table>
 					<br>
-					<font color="FFB266">Examples: FF0000 (red), 00FF00 (green), 0000FF (blue)</font>
-					<br><br>
 					
-					<edit var="title_color" width="150" height="20">
-					<br><br>
-					
-					<!-- Action Buttons -->
+					<!-- Purchase Buttons -->
 					<table border=0 cellpadding=8 cellspacing=5>
 						<tr>
+							<td align="center" colspan=2>
+								<font color="AAAAAA">Click a color above to preview for FREE (10 seconds)</font>
+							</td>
+						</tr>
+						<tr>
 							<td align="center">
-								<button value="Preview (Free)" action="bypass _bbscolorsystem;preview_title;%title_color" width=150 height=35 back="L2UI_CT1.HtmlWnd_DF_Level_Down" fore="L2UI_CT1.HtmlWnd_DF_Level">
-								<br>
-								<font size=1 color="99CCFF">Test for 10 seconds</font>
+								<button value="Buy Red (1M Adena)" action="bypass _bbscolorsystem;buy_title;FF0000" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 							<td align="center">
-								<button value="Buy (1,000,000 Adena)" action="bypass _bbscolorsystem;buy_title;%title_color" width=170 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
-								<br>
-								<font size=1 color="FFD700">Permanent change</font>
+								<button value="Buy Green (1M Adena)" action="bypass _bbscolorsystem;buy_title;00FF00" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+								<button value="Buy Blue (1M Adena)" action="bypass _bbscolorsystem;buy_title;0000FF" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
+							</td>
+							<td align="center">
+								<button value="Buy Purple (1M Adena)" action="bypass _bbscolorsystem;buy_title;FF00FF" width=150 height=35 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip">
 							</td>
 						</tr>
 					</table>
@@ -122,11 +164,9 @@
 				<td align="center">
 					<font name="hs12" color="CDB67F">How It Works</font>
 					<br><br>
-					<font color="FFFFFF">1. Enter a 6-digit HEX color code (without #)</font>
+					<font color="FFFFFF">1. Click any color button to preview for 10 seconds (FREE)</font>
 					<br>
-					<font color="FFFFFF">2. Click "Preview" to test for 10 seconds (FREE)</font>
-					<br>
-					<font color="FFFFFF">3. Click "Buy" for permanent color (1,000,000 Adena)</font>
+					<font color="FFFFFF">2. Click "Buy" button for permanent color (1,000,000 Adena)</font>
 					<br>
 					<font color="AAAAAA">Colors are saved permanently to your character</font>
 				</td>
