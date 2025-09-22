@@ -45,6 +45,10 @@ public class ColorSystem implements IWriteBoardHandler
 {
 	private static final Logger LOGGER = Logger.getLogger(ColorSystem.class.getName());
 	
+	static {
+		LOGGER.info("ColorSystem handler initialized - IWriteBoardHandler interface");
+	}
+	
 	private static final String[] COMMANDS =
 	{
 		"_bbscolorsystem"
@@ -57,6 +61,7 @@ public class ColorSystem implements IWriteBoardHandler
 	@Override
 	public String[] getCommandList()
 	{
+		LOGGER.info("ColorSystem getCommandList() called - returning: " + java.util.Arrays.toString(COMMANDS));
 		return COMMANDS;
 	}
 	
@@ -73,10 +78,19 @@ public class ColorSystem implements IWriteBoardHandler
 		return false;
 	}
 	
+	/**
+	 * This method should be called when forms with Write commands are submitted
+	 */
 	@Override
 	public boolean writeCommunityBoardCommand(Player player, String arg1, String arg2, String arg3, String arg4, String arg5)
 	{
-		LOGGER.info("ColorSystem writeCommunityBoardCommand called - Player: " + player.getName() + ", arg1: " + arg1 + ", arg2: " + arg2);
+		LOGGER.info("=== ColorSystem writeCommunityBoardCommand CALLED ===");
+		LOGGER.info("Player: " + player.getName());
+		LOGGER.info("arg1: " + arg1);
+		LOGGER.info("arg2: " + arg2);
+		LOGGER.info("arg3: " + arg3);
+		LOGGER.info("arg4: " + arg4);
+		LOGGER.info("arg5: " + arg5);
 		
 		if (arg1 == null)
 		{
