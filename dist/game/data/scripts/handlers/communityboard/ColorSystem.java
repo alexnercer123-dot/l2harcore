@@ -257,7 +257,12 @@ public class ColorSystem implements IWriteBoardHandler
 				player.getAppearance().setNameColor(originalColor);
 				player.broadcastUserInfo();
 				player.sendMessage("Nickname color preview ended.");
+				// Refresh the page after preview ends
+				showColorSystemPage(player);
 			}, PREVIEW_DURATION);
+			
+			// Also refresh the page immediately to prevent button sticking
+			showColorSystemPage(player);
 			
 			return true;
 		}
@@ -312,7 +317,12 @@ public class ColorSystem implements IWriteBoardHandler
 				player.getAppearance().setTitleColor(originalColor);
 				player.broadcastUserInfo();
 				player.sendMessage("Title color preview ended.");
+				// Refresh the page after preview ends
+				showColorSystemPage(player);
 			}, PREVIEW_DURATION);
+			
+			// Also refresh the page immediately to prevent button sticking
+			showColorSystemPage(player);
 			
 			return true;
 		}

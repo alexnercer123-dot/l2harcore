@@ -41,7 +41,20 @@
 				<td align="center">
 					<font name="hs14" color="FFCC66">Nickname Color Customization</font>
 					<br><br>
-					<font color="FFFFFF">Choose a color to preview or purchase:</font>
+					<font color="FFFFFF">Choose a preset color or enter custom HEX:</font>
+					<br><br>
+					
+					<!-- Custom HEX Input -->
+					<table border=0 cellpadding=5 cellspacing=0>
+						<tr>
+							<td><font color="FFFFFF">Custom HEX (6 digits):</font></td>
+							<td><edit var="custom_nick" width="80" height="15"></td>
+							<td><button value="Preview" action="Write _bbscolorsystem preview_nick $custom_nick" width=70 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Buy" action="Write _bbscolorsystem buy_nick $custom_nick" width=60 height=25 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip"></td>
+						</tr>
+					</table>
+					<br>
+					<font color="FFB266">Examples: FF0000 (red), 00FF00 (green), 0000FF (blue)</font>
 					<br><br>
 					
 					<!-- Preset Colors for Preview -->
@@ -103,7 +116,20 @@
 				<td align="center">
 					<font name="hs14" color="FFCC66">Title Color Customization</font>
 					<br><br>
-					<font color="FFFFFF">Choose a color to preview or purchase:</font>
+					<font color="FFFFFF">Choose a preset color or enter custom HEX:</font>
+					<br><br>
+					
+					<!-- Custom HEX Input -->
+					<table border=0 cellpadding=5 cellspacing=0>
+						<tr>
+							<td><font color="FFFFFF">Custom HEX (6 digits):</font></td>
+							<td><edit var="custom_title" width="80" height="15"></td>
+							<td><button value="Preview" action="Write _bbscolorsystem preview_title $custom_title" width=70 height=25 back="L2UI_CT1.Button_DF_Down" fore="L2UI_CT1.Button_DF"></td>
+							<td><button value="Buy" action="Write _bbscolorsystem buy_title $custom_title" width=60 height=25 back="L2UI_CT1.OlympiadWnd_DF_BuyEquip_Down" fore="L2UI_CT1.OlympiadWnd_DF_BuyEquip"></td>
+						</tr>
+					</table>
+					<br>
+					<font color="FFB266">Examples: FF0000 (red), 00FF00 (green), 0000FF (blue)</font>
 					<br><br>
 					
 					<!-- Preset Colors for Preview -->
