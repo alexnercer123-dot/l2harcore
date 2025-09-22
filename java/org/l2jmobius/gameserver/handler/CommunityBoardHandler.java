@@ -145,6 +145,28 @@ public class CommunityBoardHandler implements IHandler<IParseBoardHandler, Strin
 			return;
 		}
 		
+		// Check if this is a direct handler command (like _bbscolorsystem)
+		if (url.startsWith("_bbs"))
+		{
+			LOG.info("CommunityBoardHandler: Direct Write command: " + url + " with args: " + arg1 + ", " + arg2);
+			final IParseBoardHandler cb = getHandler(url);
+			if (cb == null)
+			{
+				LOG.warning(CommunityBoardHandler.class.getSimpleName() + ": Couldn't find write handler for command " + url + "!");
+				return;
+			}
+			
+			if (!(cb instanceof IWriteBoardHandler))
+			{
+				LOG.warning(CommunityBoardHandler.class.getSimpleName() + ": " + cb.getClass().getSimpleName() + " doesn't implement write!");
+				return;
+			}
+			
+			((IWriteBoardHandler) cb).writeCommunityBoardCommand(player, arg1, arg2, arg3, arg4, arg5);
+			return;
+		}
+		
+		// Handle legacy hardcoded URLs
 		String cmd = "";
 		switch (url)
 		{
