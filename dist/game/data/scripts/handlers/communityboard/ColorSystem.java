@@ -106,18 +106,39 @@ public class ColorSystem implements IWriteBoardHandler
 			{
 				case "preview_nick":
 					LOGGER.info("ColorSystem: Processing preview_nick with color: " + arg2);
-					return previewNickColor(player, arg2);
+					if (arg2 == null || arg2.trim().isEmpty())
+					{
+						player.sendMessage("Please enter a color code!");
+						return false;
+					}
+					return previewNickColor(player, arg2.trim());
 				case "preview_title":
 					LOGGER.info("ColorSystem: Processing preview_title with color: " + arg2);
-					return previewTitleColor(player, arg2);
+					if (arg2 == null || arg2.trim().isEmpty())
+					{
+						player.sendMessage("Please enter a color code!");
+						return false;
+					}
+					return previewTitleColor(player, arg2.trim());
 				case "buy_nick":
 					LOGGER.info("ColorSystem: Processing buy_nick with color: " + arg2);
-					return buyNickColor(player, arg2);
+					if (arg2 == null || arg2.trim().isEmpty())
+					{
+						player.sendMessage("Please enter a color code!");
+						return false;
+					}
+					return buyNickColor(player, arg2.trim());
 				case "buy_title":
 					LOGGER.info("ColorSystem: Processing buy_title with color: " + arg2);
-					return buyTitleColor(player, arg2);
+					if (arg2 == null || arg2.trim().isEmpty())
+					{
+						player.sendMessage("Please enter a color code!");
+						return false;
+					}
+					return buyTitleColor(player, arg2.trim());
 				default:
 					LOGGER.warning("ColorSystem: Unknown command: " + arg1);
+					player.sendMessage("Unknown command: " + arg1);
 					return false;
 			}
 		}
@@ -364,21 +385,25 @@ public class ColorSystem implements IWriteBoardHandler
 	{
 		if (hexColor == null || hexColor.trim().isEmpty())
 		{
+			LOGGER.warning("ColorSystem isValidHexColor: hexColor is null or empty");
 			return false;
 		}
 		
 		// Remove spaces and convert to uppercase
 		hexColor = hexColor.trim().toUpperCase();
+		LOGGER.info("ColorSystem isValidHexColor: Processing color: " + hexColor);
 		
 		// Remove # if present
 		if (hexColor.startsWith("#"))
 		{
 			hexColor = hexColor.substring(1);
+			LOGGER.info("ColorSystem isValidHexColor: Removed # symbol, new color: " + hexColor);
 		}
 		
 		// Must be exactly 6 characters
 		if (hexColor.length() != 6)
 		{
+			LOGGER.warning("ColorSystem isValidHexColor: Invalid length: " + hexColor.length() + ", expected 6");
 			return false;
 		}
 		
@@ -388,10 +413,12 @@ public class ColorSystem implements IWriteBoardHandler
 			final char c = hexColor.charAt(i);
 			if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
 			{
+				LOGGER.warning("ColorSystem isValidHexColor: Invalid character '" + c + "' at position " + i);
 				return false;
 			}
 		}
 		
+		LOGGER.info("ColorSystem isValidHexColor: Valid color: " + hexColor);
 		return true;
 	}
 	
