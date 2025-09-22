@@ -55,7 +55,7 @@ public class RaceVoicedCommand implements IVoicedCommandHandler
 			
 			// Send message to player about their race points
 			final String message = "Your race (" + raceName + ") currently has " + racePoints + " RvR points.";
-			player.sendPacket(new CreatureSay(null, ChatType.SYSTEM, "", message));
+			player.sendPacket(new CreatureSay(null, ChatType.GENERAL, "", message));
 			
 			return true;
 		}

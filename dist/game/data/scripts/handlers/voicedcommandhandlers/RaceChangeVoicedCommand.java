@@ -155,7 +155,7 @@ public class RaceChangeVoicedCommand implements IVoicedCommandHandler
 		// Note: The race is stored implicitly through the class ID in the database
 		// For full implementation, we would need to add a separate race column
 		// or modify the class system. For now, this demonstrates the concept.
-		player.storeCharBase();
+		player.store(true);
 	}
 	
 	/**
