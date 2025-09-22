@@ -334,6 +334,7 @@ public class ColorSystem implements IWriteBoardHandler
 		}
 		
 		try
+		{
 			final int colorValue = Integer.parseInt(hexColor, 16);
 			final int originalColor = player.getAppearance().getTitleColor();
 			
