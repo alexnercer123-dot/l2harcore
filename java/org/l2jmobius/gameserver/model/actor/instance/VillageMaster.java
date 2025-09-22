@@ -849,58 +849,88 @@ public class VillageMaster extends Folk
 			
 			if (player.getRace() == Race.KAMAEL)
 			{
-				for (PlayerClass cid : PlayerClass.values())
+				// RvR System: Allow cross-race subclasses when enabled
+				if (Config.RVR_ENABLED && !Config.RVR_CLASS_RACE_RESTRICTIONS)
 				{
-					if (cid.getRace() != Race.KAMAEL)
+					// Remove only gender-specific restrictions for Kamael in RvR mode
+					if (player.getAppearance().isFemale())
 					{
-						subclasses.remove(cid);
+						subclasses.remove(PlayerClass.MALE_SOULBREAKER);
 					}
-				}
-				
-				if (player.getAppearance().isFemale())
-				{
-					subclasses.remove(PlayerClass.MALE_SOULBREAKER);
+					else
+					{
+						subclasses.remove(PlayerClass.FEMALE_SOULBREAKER);
+					}
+					
+					if (!player.getSubClasses().containsKey(2) || (player.getSubClasses().get(2).getLevel() < 75))
+					{
+						subclasses.remove(PlayerClass.INSPECTOR);
+					}
 				}
 				else
 				{
-					subclasses.remove(PlayerClass.FEMALE_SOULBREAKER);
-				}
-				
-				if (!player.getSubClasses().containsKey(2) || (player.getSubClasses().get(2).getLevel() < 75))
-				{
-					subclasses.remove(PlayerClass.INSPECTOR);
+					// Original race restrictions for Kamael
+					for (PlayerClass cid : PlayerClass.values())
+					{
+						if (cid.getRace() != Race.KAMAEL)
+						{
+							subclasses.remove(cid);
+						}
+					}
+					
+					if (player.getAppearance().isFemale())
+					{
+						subclasses.remove(PlayerClass.MALE_SOULBREAKER);
+					}
+					else
+					{
+						subclasses.remove(PlayerClass.FEMALE_SOULBREAKER);
+					}
+					
+					if (!player.getSubClasses().containsKey(2) || (player.getSubClasses().get(2).getLevel() < 75))
+					{
+						subclasses.remove(PlayerClass.INSPECTOR);
+					}
 				}
 			}
 			else
 			{
-				if (player.getRace() == Race.ELF)
+				// RvR System: Allow cross-race subclasses when enabled
+				if (!Config.RVR_ENABLED || Config.RVR_CLASS_RACE_RESTRICTIONS)
 				{
+					// Original race restrictions
+					if (player.getRace() == Race.ELF)
+					{
+						for (PlayerClass cid : PlayerClass.values())
+						{
+							if (cid.getRace() == Race.DARK_ELF)
+							{
+								subclasses.remove(cid);
+							}
+						}
+					}
+					else if (player.getRace() == Race.DARK_ELF)
+					{
+						for (PlayerClass cid : PlayerClass.values())
+						{
+							if (cid.getRace() == Race.ELF)
+							{
+								subclasses.remove(cid);
+							}
+						}
+					}
+					
+					// Remove all Kamael classes for non-Kamael races
 					for (PlayerClass cid : PlayerClass.values())
 					{
-						if (cid.getRace() == Race.DARK_ELF)
+						if (cid.getRace() == Race.KAMAEL)
 						{
 							subclasses.remove(cid);
 						}
 					}
 				}
-				else if (player.getRace() == Race.DARK_ELF)
-				{
-					for (PlayerClass cid : PlayerClass.values())
-					{
-						if (cid.getRace() == Race.ELF)
-						{
-							subclasses.remove(cid);
-						}
-					}
-				}
-				
-				for (PlayerClass cid : PlayerClass.values())
-				{
-					if (cid.getRace() == Race.KAMAEL)
-					{
-						subclasses.remove(cid);
-					}
-				}
+				// In RvR mode with no class restrictions, all subclasses are allowed
+				// (no additional filtering needed)
 			}
 			
 			final Set<PlayerClass> unavailableClasses = subclassSetMap.get(pClass);
@@ -1015,6 +1045,13 @@ public class VillageMaster extends Folk
 		if (Config.ALT_GAME_SUBCLASS_EVERYWHERE)
 		{
 			return true;
+		}
+		
+		// RvR System: Allow cross-race class changes when enabled
+		if (Config.RVR_ENABLED && !Config.RVR_CLASS_RACE_RESTRICTIONS)
+		{
+			// Only check teach type, ignore race restrictions
+			return checkVillageMasterTeachType(pclass);
 		}
 		
 		return checkVillageMasterRace(pclass) && checkVillageMasterTeachType(pclass);
