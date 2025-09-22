@@ -1,0 +1,120 @@
+<html noscrollbar>
+	<title>Color Change Service</title>
+	<body>
+		<table width=700>
+			<tr>
+				<td height=10></td>
+			</tr>
+		</table>
+		<table width=20>
+			<tr>
+				<td>
+					%navigation%
+				</td>
+				<td align="center">
+					<center>
+						<table width=555>
+							<tr>
+								<td align="center"><font name="ScreenMessageSmall" color="fff3d9">Color Change Service</font></td>
+							</tr>
+						</table>
+						<table width=555>
+							<tr>
+								<td align="center">
+									<font color="fff3d9">
+									Change your character name or title color using hex color codes.<br1>
+									Enter a hex color code (e.g., FF0000 for red, 00FF00 for green, 0000FF for blue).
+								   </font>
+							    </td>
+							</tr>
+						</table>
+						<br>
+						<table width=555>
+							<tr>
+								<td align="center">
+									<table height=120 background="L2UI_CT1.GroupBox.LineGroupBoxBG">
+										<tr>
+											<td align="center"><font color="LEVEL" name="hs9">Name Color Change</font></td>
+										</tr>
+										<tr><td height=10></td></tr>
+										<tr>
+											<td align="center">
+												<table>
+													<tr>
+														<td><font color="FFFFFF">Hex Color Code: </font></td>
+														<td><edit width=100 height=15 var="namecolor" type="text"></td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr><td height=10></td></tr>
+										<tr>
+											<td align="center">
+												<table>
+													<tr>
+														<td align="center"><button value="Preview" action="bypass _bbspreviewname;$namecolor" width=80 height=30 back="L2UI_EPIC.Button.Button29red_Down" fore="L2UI_EPIC.Button.Button29red_DF"></button></td>
+														<td align="center"><button value="Apply" action="bypass _bbschangename;$namecolor" width=80 height=30 back="L2UI_EPIC.Button.Button29red_Down" fore="L2UI_EPIC.Button.Button29red_DF"></button></td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+						<br>
+						<table width=555>
+							<tr>
+								<td align="center">
+									<table height=120 background="L2UI_CT1.GroupBox.LineGroupBoxBG">
+										<tr>
+											<td align="center"><font color="LEVEL" name="hs9">Title Color Change</font></td>
+										</tr>
+										<tr><td height=10></td></tr>
+										<tr>
+											<td align="center">
+												<table>
+													<tr>
+														<td><font color="FFFFFF">Hex Color Code: </font></td>
+														<td><edit width=100 height=15 var="titlecolor" type="text"></td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr><td height=10></td></tr>
+										<tr>
+											<td align="center">
+												<table>
+													<tr>
+														<td align="center"><button value="Preview" action="bypass _bbspreviewtitle;$titlecolor" width=80 height=30 back="L2UI_EPIC.Button.Button29red_Down" fore="L2UI_EPIC.Button.Button29red_DF"></button></td>
+														<td align="center"><button value="Apply" action="bypass _bbschangetitle;$titlecolor" width=80 height=30 back="L2UI_EPIC.Button.Button29red_Down" fore="L2UI_EPIC.Button.Button29red_DF"></button></td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+						<br>
+						<table width=555>
+							<tr>
+								<td align="center">
+									<font color="CDB67F" name="hs9">
+									Valid hex color examples:<br1>
+									FF0000 (Red), 00FF00 (Green), 0000FF (Blue)<br1>
+									FFFF00 (Yellow), FF00FF (Magenta), 00FFFF (Cyan)
+									</font>
+								</td>
+							</tr>
+						</table>
+						<br>
+						<table width=555 align="center">
+							<tr><td align="center"><button value="Back" action="bypass _bbstop;services.html" width=180 height=30 back="L2UI_EPIC.Button.Button29red_Down" fore="L2UI_EPIC.Button.Button29red_DF"></button></td></tr>
+						</table>
+					</center>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
