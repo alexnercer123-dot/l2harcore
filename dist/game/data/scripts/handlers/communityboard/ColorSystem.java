@@ -76,74 +76,42 @@ public class ColorSystem implements IWriteBoardHandler
 			showColorSystemPage(player);
 			return true;
 		}
-		else if (command.startsWith("_bbscolorsystem;"))
+		
+		// Handle commands with parameters (from bypass or Write commands)
+		if (command.startsWith("_bbscolorsystem;"))
 		{
-			// Handle bypass commands like _bbscolorsystem;preview_nick;FF0000
+			LOGGER.info("ColorSystem: Processing bypass command parts: " + java.util.Arrays.toString(command.split(";")));
 			String[] parts = command.split(";");
-			LOGGER.info("ColorSystem: Processing bypass command parts: " + java.util.Arrays.toString(parts));
-			
 			if (parts.length >= 2)
 			{
 				String action = parts[1];
-				String hexColor = parts.length > 2 ? parts[2] : null;
+				String hexColor = parts.length >= 3 ? parts[2] : null;
 				
 				LOGGER.info("ColorSystem: Action: " + action + ", HEX: " + hexColor);
 				
+				// Check if this is a form variable that wasn't substituted
+				if (hexColor != null && (hexColor.equals("$nick_color") || hexColor.equals("$title_color")))
+				{
+					LOGGER.warning("ColorSystem: Form variable not substituted: " + hexColor);
+					player.sendMessage("Please enter a valid HEX color code! Example: FF0000");
+					return false;
+				}
+				
 				switch (action)
 				{
-					case "test_action":
-						player.sendMessage("Test bypass action successful!");
-						return true;
 					case "preview_nick":
-						if (hexColor != null && !hexColor.trim().isEmpty())
-						{
-							return previewNickColor(player, hexColor.trim());
-						}
-						else
-						{
-							player.sendMessage("Please enter a color code!");
-							return false;
-						}
+						return previewNickColor(player, hexColor);
 					case "preview_title":
-						if (hexColor != null && !hexColor.trim().isEmpty())
-						{
-							return previewTitleColor(player, hexColor.trim());
-						}
-						else
-						{
-							player.sendMessage("Please enter a color code!");
-							return false;
-						}
+						return previewTitleColor(player, hexColor);
 					case "buy_nick":
-						if (hexColor != null && !hexColor.trim().isEmpty())
-						{
-							return buyNickColor(player, hexColor.trim());
-						}
-						else
-						{
-							player.sendMessage("Please enter a color code!");
-							return false;
-						}
+						return buyNickColor(player, hexColor);
 					case "buy_title":
-						if (hexColor != null && !hexColor.trim().isEmpty())
-						{
-							return buyTitleColor(player, hexColor.trim());
-						}
-						else
-						{
-							player.sendMessage("Please enter a color code!");
-							return false;
-						}
+						return buyTitleColor(player, hexColor);
 					default:
 						LOGGER.warning("ColorSystem: Unknown action: " + action);
 						player.sendMessage("Unknown action: " + action);
 						return false;
 				}
-			}
-			else
-			{
-				LOGGER.warning("ColorSystem: Invalid bypass command format: " + command);
-				return false;
 			}
 		}
 		
@@ -175,10 +143,6 @@ public class ColorSystem implements IWriteBoardHandler
 		{
 			switch (arg1)
 			{
-				case "test_write":
-					LOGGER.info("ColorSystem: Test write command received! arg2: " + arg2);
-					player.sendMessage("Test write successful! Color received: " + arg2);
-					return true;
 				case "preview_nick":
 					LOGGER.info("ColorSystem: Processing preview_nick with color: " + arg2);
 					if (arg2 == null || arg2.trim().isEmpty())
