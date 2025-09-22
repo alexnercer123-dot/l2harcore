@@ -161,6 +161,7 @@ public class Config
 	private static final String CUSTOM_WALKER_BOT_PROTECTION_CONFIG_FILE = "./config/Custom/WalkerBotProtection.ini";
 	private static final String CUSTOM_WEDDING_CONFIG_FILE = "./config/Custom/Wedding.ini";
 	private static final String CUSTOM_PERMANENT_DEATH_CONFIG_FILE = "./config/Custom/PermanentDeath.ini";
+	private static final String CUSTOM_RVR_SYSTEM_CONFIG_FILE = "./config/Custom/RvRSystem.ini";
 	private static final String AUTOBOT_CONFIG_FILE = "./config/Autobot.ini";
 	
 	// --------------------------------------------------
@@ -768,6 +769,18 @@ public class Config
 	public static boolean PERMANENT_DEATH_GRANDBOSS_ENABLED;
 	public static boolean PERMANENT_DEATH_PEACE_ZONE_ENABLED;
 	public static boolean PERMANENT_DEATH_SIEGE_ZONE_ENABLED;
+	
+	// --------------------------------------------------
+	// Custom - RvR System
+	// --------------------------------------------------
+	public static boolean RVR_ENABLED;
+	public static int RVR_POINTS_PER_KILL;
+	public static boolean RVR_DISABLE_PK_POINTS;
+	public static boolean RVR_DISABLE_KARMA;
+	public static boolean RVR_CLAN_RACE_RESTRICTIONS;
+	public static boolean RVR_PARTY_RACE_RESTRICTIONS;
+	public static boolean RVR_CLASS_RACE_RESTRICTIONS;
+	public static Map<String, Map<Integer, ItemHolder>> RVR_RACE_REWARDS;
 	public static int BOOKMARK_CONSUME_ITEM_ID;
 	public static boolean BOTREPORT_ENABLE;
 	public static String[] BOTREPORT_RESETPOINT_HOUR;
@@ -3978,6 +3991,45 @@ public class Config
 			PERMANENT_DEATH_GRANDBOSS_ENABLED = permanentDeathConfig.getBoolean("EnableGrandBossPermanentDeath", true);
 			PERMANENT_DEATH_PEACE_ZONE_ENABLED = permanentDeathConfig.getBoolean("EnablePeaceZonePermanentDeath", false);
 			PERMANENT_DEATH_SIEGE_ZONE_ENABLED = permanentDeathConfig.getBoolean("EnableSiegeZonePermanentDeath", false);
+			
+			// --------------------------------------------------
+			// Custom - RvR System
+			// --------------------------------------------------
+			final ConfigReader rvrConfig = new ConfigReader(CUSTOM_RVR_SYSTEM_CONFIG_FILE);
+			RVR_ENABLED = rvrConfig.getBoolean("RvREnabled", true);
+			RVR_POINTS_PER_KILL = rvrConfig.getInt("RvRPointsPerKill", 1);
+			RVR_DISABLE_PK_POINTS = rvrConfig.getBoolean("RvRDisablePkPoints", true);
+			RVR_DISABLE_KARMA = rvrConfig.getBoolean("RvRDisableKarma", true);
+			RVR_CLAN_RACE_RESTRICTIONS = rvrConfig.getBoolean("RvRClanRaceRestrictions", true);
+			RVR_PARTY_RACE_RESTRICTIONS = rvrConfig.getBoolean("RvRPartyRaceRestrictions", true);
+			RVR_CLASS_RACE_RESTRICTIONS = rvrConfig.getBoolean("RvRClassRaceRestrictions", false);
+			
+			// Parse RvR race rewards
+			RVR_RACE_REWARDS = new HashMap<>();
+			final String[] races = {"HUMAN", "ELF", "DARK_ELF", "ORC", "DWARF", "KAMAEL", "ERTHEIA"};
+			for (String race : races)
+			{
+				final Map<Integer, ItemHolder> raceRewards = new HashMap<>();
+				final String reward100 = rvrConfig.getString("RaceReward" + race + "100", "");
+				if (!reward100.isEmpty())
+				{
+					final String[] split100 = reward100.split(",");
+					raceRewards.put(100, new ItemHolder(Integer.parseInt(split100[0]), Long.parseLong(split100[1])));
+				}
+				final String reward500 = rvrConfig.getString("RaceReward" + race + "500", "");
+				if (!reward500.isEmpty())
+				{
+					final String[] split500 = reward500.split(",");
+					raceRewards.put(500, new ItemHolder(Integer.parseInt(split500[0]), Long.parseLong(split500[1])));
+				}
+				final String reward1000 = rvrConfig.getString("RaceReward" + race + "1000", "");
+				if (!reward1000.isEmpty())
+				{
+					final String[] split1000 = reward1000.split(",");
+					raceRewards.put(1000, new ItemHolder(Integer.parseInt(split1000[0]), Long.parseLong(split1000[1])));
+				}
+				RVR_RACE_REWARDS.put(race, raceRewards);
+			}
 			
 			// --------------------------------------------------
 			// Custom - Wedding

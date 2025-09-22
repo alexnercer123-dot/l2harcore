@@ -2280,6 +2280,23 @@ public class Clan
 			return false;
 		}
 		
+		// RvR System - Check race restrictions for clan membership
+		if (Config.RVR_ENABLED && Config.RVR_CLAN_RACE_RESTRICTIONS)
+		{
+			final ClanMember leader = getLeader();
+			if (leader != null)
+			{
+				final int leaderRace = leader.getRaceOrdinal();
+				final int targetRace = target.getRace().ordinal();
+				
+				if (leaderRace != targetRace)
+				{
+					player.sendMessage("Only players of the same race as the clan leader can join this clan.");
+					return false;
+				}
+			}
+		}
+		
 		if (getSubPledgeMembersCount(pledgeType) >= getMaxNrOfMembers(pledgeType))
 		{
 			if (pledgeType == 0)

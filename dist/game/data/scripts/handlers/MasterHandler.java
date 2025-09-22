@@ -317,6 +317,7 @@ import handlers.voicedcommandhandlers.Offline;
 import handlers.voicedcommandhandlers.OfflinePlay;
 import handlers.voicedcommandhandlers.Online;
 import handlers.voicedcommandhandlers.Premium;
+import handlers.voicedcommandhandlers.RaceVoicedCommand;
 import handlers.voicedcommandhandlers.Wedding;
 
 /**
@@ -581,6 +582,7 @@ public class MasterHandler
 			Config.ENABLE_ONLINE_COMMAND ? Online.class : null,
 			Config.PREMIUM_SYSTEM_ENABLED ? Premium.class : null,
 			Config.AUTO_POTIONS_ENABLED ? AutoPotion.class : null,
+			Config.RVR_ENABLED ? RaceVoicedCommand.class : null,
 		},
 		{
 			// Target Handlers

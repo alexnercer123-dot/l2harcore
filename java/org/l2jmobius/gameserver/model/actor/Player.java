@@ -103,6 +103,7 @@ import org.l2jmobius.gameserver.managers.MentorManager;
 import org.l2jmobius.gameserver.managers.PunishmentManager;
 import org.l2jmobius.gameserver.managers.QuestManager;
 import org.l2jmobius.gameserver.managers.RecipeManager;
+import org.l2jmobius.gameserver.managers.RvRManager;
 import org.l2jmobius.gameserver.managers.SellBuffsManager;
 import org.l2jmobius.gameserver.managers.SiegeManager;
 import org.l2jmobius.gameserver.managers.ZoneManager;
@@ -5453,6 +5454,21 @@ public class Player extends Playable
 			return;
 		}
 		
+		// RvR System - Handle race vs race kills
+		if (Config.RVR_ENABLED && RvRManager.isDifferentRace(getRace(), killedPlayer.getRace()))
+		{
+			// Add points to the killer's race
+			RvRManager.getInstance().addPoints(getRace(), Config.RVR_POINTS_PER_KILL);
+			
+			// Skip PK points and karma for RvR kills if configured
+			if (Config.RVR_DISABLE_PK_POINTS && Config.RVR_DISABLE_KARMA)
+			{
+				broadcastUserInfo(UserInfoType.SOCIAL);
+				checkItemRestriction();
+				return;
+			}
+		}
+		
 		if (checkIfPvP(killedPlayer))
 		{
 			// Check if player should get + rep.
@@ -5474,31 +5490,60 @@ public class Player extends Playable
 		}
 		else if ((getReputation() > 0) && (_pkKills == 0))
 		{
-			setReputation(0);
+			// Skip setting reputation for RvR kills if configured
+			if (!(Config.RVR_ENABLED && RvRManager.isDifferentRace(getRace(), killedPlayer.getRace()) && Config.RVR_DISABLE_KARMA))
+			{
+				setReputation(0);
+			}
 			if (target.isPlayer())
 			{
-				setPkKills(getPkKills() + 1);
+				// Skip increasing PK kills for RvR kills if configured
+				if (!(Config.RVR_ENABLED && RvRManager.isDifferentRace(getRace(), killedPlayer.getRace()) && Config.RVR_DISABLE_PK_POINTS))
+				{
+					setPkKills(getPkKills() + 1);
+				}
 			}
 		}
 		else // Calculate new karma and increase pk count.
 		{
-			if (Config.FACTION_SYSTEM_ENABLED)
+			// Skip karma and PK calculations for RvR kills if configured
+			if (Config.RVR_ENABLED && RvRManager.isDifferentRace(getRace(), killedPlayer.getRace()) && Config.RVR_DISABLE_KARMA && Config.RVR_DISABLE_PK_POINTS)
+			{
+				// Do nothing for RvR kills
+			}
+			else if (Config.FACTION_SYSTEM_ENABLED)
 			{
 				if ((_isGood && killedPlayer.isGood()) || (_isEvil && killedPlayer.isEvil()))
 				{
-					setReputation(getReputation() - Formulas.calculateKarmaGain(getPkKills(), target.isSummon()));
+					// Apply karma only for non-RvR kills or if not disabled
+					if (!(Config.RVR_ENABLED && RvRManager.isDifferentRace(getRace(), killedPlayer.getRace()) && Config.RVR_DISABLE_KARMA))
+					{
+						setReputation(getReputation() - Formulas.calculateKarmaGain(getPkKills(), target.isSummon()));
+					}
 					if (target.isPlayer())
 					{
-						setPkKills(getPkKills() + 1);
+						// Apply PK kills only for non-RvR kills or if not disabled
+						if (!(Config.RVR_ENABLED && RvRManager.isDifferentRace(getRace(), killedPlayer.getRace()) && Config.RVR_DISABLE_PK_POINTS))
+						{
+							setPkKills(getPkKills() + 1);
+						}
 					}
 				}
 			}
 			else
 			{
-				setReputation(getReputation() - Formulas.calculateKarmaGain(getPkKills(), target.isSummon()));
+				// Apply karma only for non-RvR kills or if not disabled
+				if (!(Config.RVR_ENABLED && RvRManager.isDifferentRace(getRace(), killedPlayer.getRace()) && Config.RVR_DISABLE_KARMA))
+				{
+					setReputation(getReputation() - Formulas.calculateKarmaGain(getPkKills(), target.isSummon()));
+				}
 				if (target.isPlayer())
 				{
-					setPkKills(getPkKills() + 1);
+					// Apply PK kills only for non-RvR kills or if not disabled
+					if (!(Config.RVR_ENABLED && RvRManager.isDifferentRace(getRace(), killedPlayer.getRace()) && Config.RVR_DISABLE_PK_POINTS))
+					{
+						setPkKills(getPkKills() + 1);
+					}
 				}
 			}
 		}

@@ -182,6 +182,34 @@ public class RequestJoinParty extends ClientPacket
 			return;
 		}
 		
+		// RvR System - Check race restrictions for party formation
+		if (Config.RVR_ENABLED && Config.RVR_PARTY_RACE_RESTRICTIONS)
+		{
+			// Check if requestor already has a party
+			if (requestor.isInParty())
+			{
+				// Check if all current party members have the same race as target
+				final Party currentParty = requestor.getParty();
+				for (Player member : currentParty.getMembers())
+				{
+					if ((member != null) && (member.getRace() != target.getRace()))
+					{
+						requestor.sendMessage("Only players of the same race can be in the same party.");
+						return;
+					}
+				}
+			}
+			else
+			{
+				// Check if requestor and target have the same race for new party
+				if (requestor.getRace() != target.getRace())
+				{
+					requestor.sendMessage("Only players of the same race can be in the same party.");
+					return;
+				}
+			}
+		}
+		
 		final Party party = requestor.getParty();
 		if ((party != null) && !party.isLeader(requestor))
 		{
