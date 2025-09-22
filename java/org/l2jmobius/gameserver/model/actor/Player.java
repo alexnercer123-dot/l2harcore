@@ -391,8 +391,8 @@ public class Player extends Playable
 	private static final String DELETE_ITEM_REUSE_SAVE = "DELETE FROM character_item_reuse_save WHERE charId=?";
 	
 	// Character Character SQL String Definitions:
-	private static final String INSERT_CHARACTER = "INSERT INTO characters (account_name,charId,char_name,level,maxHp,curHp,maxCp,curCp,maxMp,curMp,face,hairStyle,hairColor,sex,exp,sp,reputation,fame,raidbossPoints,pvpkills,pkkills,clanid,race,classid,deletetime,cancraft,title,title_color,online,clan_privs,wantspeace,base_class,nobless,power_grade,vitality_points,createDate,lastAccess) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,face=?,hairStyle=?,hairColor=?,sex=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,reputation=?,fame=?,raidbossPoints=?,pvpkills=?,pkkills=?,clanid=?,race=?,classid=?,deletetime=?,title=?,title_color=?,online=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,nobless=?,power_grade=?,subpledge=?,lvl_joined_academy=?,apprentice=?,sponsor=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,bookmarkslot=?,vitality_points=?,language=?,faction=?,pccafe_points=? WHERE charId=?";
+	private static final String INSERT_CHARACTER = "INSERT INTO characters (account_name,charId,char_name,level,maxHp,curHp,maxCp,curCp,maxMp,curMp,face,hairStyle,hairColor,sex,exp,sp,reputation,fame,raidbossPoints,pvpkills,pkkills,clanid,race,classid,deletetime,cancraft,title,title_color,name_color,online,clan_privs,wantspeace,base_class,nobless,power_grade,vitality_points,createDate,lastAccess) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,face=?,hairStyle=?,hairColor=?,sex=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,reputation=?,fame=?,raidbossPoints=?,pvpkills=?,pkkills=?,clanid=?,race=?,classid=?,deletetime=?,title=?,title_color=?,name_color=?,online=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,nobless=?,power_grade=?,subpledge=?,lvl_joined_academy=?,apprentice=?,sponsor=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,bookmarkslot=?,vitality_points=?,language=?,faction=?,pccafe_points=? WHERE charId=?";
 	private static final String UPDATE_CHARACTER_ACCESS = "UPDATE characters SET accesslevel = ? WHERE charId = ?";
 	private static final String RESTORE_CHARACTER = "SELECT * FROM characters WHERE charId=?";
 	
@@ -6939,6 +6939,12 @@ public class Player extends Playable
 						player.getAppearance().setTitleColor(titleColor);
 					}
 					
+					final int nameColor = rset.getInt("name_color");
+					if (nameColor != 0xFFFFFF)
+					{
+						player.getAppearance().setNameColor(nameColor);
+					}
+					
 					player.setFistsWeaponItem(player.findFistsWeaponItem(activeClassId));
 					player.setUptime(System.currentTimeMillis());
 					
@@ -7433,29 +7439,30 @@ public class Player extends Playable
 			statement.setLong(27, _deleteTimer);
 			statement.setString(28, getTitle());
 			statement.setInt(29, _appearance.getTitleColor());
-			statement.setInt(30, isOnlineInt());
-			statement.setInt(31, _clanPrivileges.getMask());
-			statement.setInt(32, _wantsPeace);
-			statement.setInt(33, _baseClass);
+			statement.setInt(30, _appearance.getNameColor());
+			statement.setInt(31, isOnlineInt());
+			statement.setInt(32, _clanPrivileges.getMask());
+			statement.setInt(33, _wantsPeace);
+			statement.setInt(34, _baseClass);
 			long totalOnlineTime = _onlineTime;
 			if (_onlineBeginTime > 0)
 			{
 				totalOnlineTime += (System.currentTimeMillis() - _onlineBeginTime) / 1000;
 			}
 			
-			statement.setLong(34, _offlineShopStart > 0 ? _onlineTime : totalOnlineTime);
-			statement.setInt(35, isNoble() ? 1 : 0);
-			statement.setInt(36, _powerGrade);
-			statement.setInt(37, _pledgeType);
-			statement.setInt(38, _lvlJoinedAcademy);
-			statement.setLong(39, _apprentice);
-			statement.setLong(40, _sponsor);
-			statement.setLong(41, _clanJoinExpiryTime);
-			statement.setLong(42, _clanCreateExpiryTime);
-			statement.setString(43, getName());
-			statement.setInt(44, _bookmarkslot);
-			statement.setInt(45, getStat().getBaseVitalityPoints());
-			statement.setString(46, _lang);
+			statement.setLong(35, _offlineShopStart > 0 ? _onlineTime : totalOnlineTime);
+			statement.setInt(36, isNoble() ? 1 : 0);
+			statement.setInt(37, _powerGrade);
+			statement.setInt(38, _pledgeType);
+			statement.setInt(39, _lvlJoinedAcademy);
+			statement.setLong(40, _apprentice);
+			statement.setLong(41, _sponsor);
+			statement.setLong(42, _clanJoinExpiryTime);
+			statement.setLong(43, _clanCreateExpiryTime);
+			statement.setString(44, getName());
+			statement.setInt(45, _bookmarkslot);
+			statement.setInt(46, getStat().getBaseVitalityPoints());
+			statement.setString(47, _lang);
 			int factionId = 0;
 			if (_isGood)
 			{
@@ -7467,9 +7474,9 @@ public class Player extends Playable
 				factionId = 2;
 			}
 			
-			statement.setInt(47, factionId);
-			statement.setInt(48, _pcCafePoints);
-			statement.setInt(49, getObjectId());
+			statement.setInt(48, factionId);
+			statement.setInt(49, _pcCafePoints);
+			statement.setInt(50, getObjectId());
 			statement.execute();
 		}
 		catch (Exception e)
