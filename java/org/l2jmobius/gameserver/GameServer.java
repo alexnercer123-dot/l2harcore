@@ -425,6 +425,8 @@ public class GameServer
 		// Register custom admin commands
 		AdminCommandHandler.getInstance().registerHandler(new org.l2jmobius.gameserver.handler.admincommandhandlers.AdminTime());
 		AdminCommandHandler.getInstance().registerHandler(new org.l2jmobius.gameserver.handlers.admincommandhandlers.AdminAutobots());
+		AdminCommandHandler.getInstance().registerHandler(new org.l2jmobius.gameserver.handler.admincommandhandlers.AdminCaravan());
+		AdminCommandHandler.getInstance().registerHandler(new org.l2jmobius.gameserver.handler.admincommandhandlers.AdminWalkingDebug());
 		
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		LOGGER.info("IdManager: Free ObjectID's remaining: " + IdManager.getInstance().getAvailableIdCount());

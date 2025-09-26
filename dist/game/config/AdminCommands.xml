@@ -99,6 +99,8 @@
 
 	<!-- ADMIN DEBUG -->
 	<admin command="debug" description="Open debug menu." accessLevel="100" />
+	<admin command="admin_caravan" description="Collect caravan route coordinates." accessLevel="30" />
+	<admin command="admin_walkdebug" description="Debug walking system for NPCs." accessLevel="30" />
 
 	<!-- ADMIN DELETE -->
 	<admin command="delete" description="Delete target NPC." accessLevel="100" />
@@ -642,4 +644,7 @@
 	<admin command="admin_autobot_list" description="Display list of active autobots." accessLevel="30" />
 	<admin command="admin_autobot_info" description="Show detailed information about a specific autobot." accessLevel="30" />
 	<admin command="admin_autobot_reload" description="Reload autobot configuration." accessLevel="30" />
+
+	<!-- ADMIN CARAVAN ROUTE COLLECTION -->
+	<admin command="admin_caravan" description="Capture current coordinates for caravan route creation." accessLevel="30" />
 </list>

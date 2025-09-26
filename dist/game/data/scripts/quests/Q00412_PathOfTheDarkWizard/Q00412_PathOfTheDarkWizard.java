@@ -70,6 +70,14 @@ public class Q00412_PathOfTheDarkWizard extends Quest
 		addTalkId(VARIKA, CHARKEREN, ANNIKA, ARKENIA);
 		addKillId(MARSH_ZOMBIE, MISERY_SKELETON, SKELETON_SCOUT, SKELETON_HUNTER, SKELETON_HUNTER_ARCHER);
 		registerQuestItems(SEEDS_OF_ANGER, SEEDS_OF_DESPAIR, SEEDS_OF_HORROR, SEEDS_OF_LUNACY, FAMILYS_REMAINS, KNEE_BONE, HEART_OF_LUNACY, LUCKY_KEY, CANDLE, HUB_SCENT);
+		
+		// Add start condition to accept all magical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+				   (playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE) || 
+				   (playerClass == PlayerClass.DARK_WIZARD);
+		}, "30421-03.htm");
 	}
 	
 	@Override
@@ -86,7 +94,10 @@ public class Q00412_PathOfTheDarkWizard extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.DARK_MAGE)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all magical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+					(playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -106,7 +117,7 @@ public class Q00412_PathOfTheDarkWizard extends Quest
 						htmltext = "30421-02.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.DARK_WIZARD)
+				else if (playerClass == PlayerClass.DARK_WIZARD)
 				{
 					htmltext = "30421-02a.htm";
 				}

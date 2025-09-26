@@ -64,6 +64,14 @@ public class Q00411_PathOfTheAssassin extends Quest
 		addTalkId(TRISKEL, GUARD_LEIKAN, ARKENIA);
 		addKillId(MOONSTONE_BEAST, CALPICO);
 		registerQuestItems(SHILENS_CALL, ARKENIAS_LETTER, LEIKANS_NOTE, MOONSTONE_BEASTS_MOLAR, SHILENS_TEARS, ARKENIAS_RECOMMENDATION);
+		
+		// Add start condition to accept all physical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+				   (playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+				   (playerClass == PlayerClass.DWARVEN_FIGHTER) || (playerClass == PlayerClass.ASSASSIN);
+		}, "30416-02.htm");
 	}
 	
 	@Override
@@ -80,7 +88,11 @@ public class Q00411_PathOfTheAssassin extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.DARK_FIGHTER)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all physical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+					(playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+					(playerClass == PlayerClass.DWARVEN_FIGHTER))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -100,7 +112,7 @@ public class Q00411_PathOfTheAssassin extends Quest
 						htmltext = "30416-03.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.ASSASSIN)
+				else if (playerClass == PlayerClass.ASSASSIN)
 				{
 					htmltext = "30416-02a.htm";
 				}

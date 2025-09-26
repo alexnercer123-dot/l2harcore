@@ -67,6 +67,14 @@ public class Q00409_PathOfTheElvenOracle extends Quest
 		addKillId(TAMIL, lIZARDMAN_WARRIOR, LIZARDMAN_SCOUT, LIZARDMAN_SOLDIER);
 		addAttackId(TAMIL, lIZARDMAN_WARRIOR, LIZARDMAN_SCOUT, LIZARDMAN_SOLDIER);
 		registerQuestItems(CRYSTAL_MEDALLION, SWINDLERS_MONEY, ALLANA_OF_DAIRY, LIZARD_CAPTAIN_ORDER, HALF_OF_DAIRY, TAMIL_NECKLACE);
+		
+		// Add start condition to accept all magical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+				   (playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE) || 
+				   (playerClass == PlayerClass.ORACLE);
+		}, "30293-02.htm");
 	}
 	
 	@Override
@@ -83,7 +91,10 @@ public class Q00409_PathOfTheElvenOracle extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.ELVEN_MAGE)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all magical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+					(playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -104,7 +115,7 @@ public class Q00409_PathOfTheElvenOracle extends Quest
 						htmltext = "30293-03.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.ORACLE)
+				else if (playerClass == PlayerClass.ORACLE)
 				{
 					htmltext = "30293-02a.htm";
 				}

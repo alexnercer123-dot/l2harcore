@@ -74,6 +74,14 @@ public class Q00406_PathOfTheElvenKnight extends Quest
 		addTalkId(MASTER_SORIUS, BLACKSMITH_KLUTO);
 		addKillId(MONSTER_DROPS.keySet());
 		registerQuestItems(SORIUS_LETTER, KLUTO_BOX, TOPAZ_PIECE, EMERALD_PIECE, KLUTO_MEMO);
+		
+		// Add start condition to accept all physical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+				   (playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+				   (playerClass == PlayerClass.DWARVEN_FIGHTER) || (playerClass == PlayerClass.ELVEN_KNIGHT);
+		}, "30327-02.htm");
 	}
 	
 	@Override
@@ -90,28 +98,35 @@ public class Q00406_PathOfTheElvenKnight extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() != PlayerClass.ELVEN_FIGHTER)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all physical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+					(playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+					(playerClass == PlayerClass.DWARVEN_FIGHTER))
 				{
-					if (player.getPlayerClass() == PlayerClass.ELVEN_KNIGHT)
+					if (player.getLevel() >= MIN_LEVEL)
 					{
-						htmltext = "30327-02a.htm";
+						if (hasQuestItems(player, ELVEN_KNIGHT_BROOCH))
+						{
+							htmltext = "30327-04.htm";
+						}
+						else
+						{
+							htmltext = "30327-05.htm";
+						}
 					}
 					else
 					{
-						htmltext = "30327-02.htm";
+						htmltext = "30327-03.htm";
 					}
 				}
-				else if (player.getLevel() < MIN_LEVEL)
+				else if (playerClass == PlayerClass.ELVEN_KNIGHT)
 				{
-					htmltext = "30327-03.htm";
-				}
-				else if (hasQuestItems(player, ELVEN_KNIGHT_BROOCH))
-				{
-					htmltext = "30327-04.htm";
+					htmltext = "30327-02a.htm";
 				}
 				else
 				{
-					htmltext = "30327-05.htm";
+					htmltext = "30327-02.htm";
 				}
 				break;
 			}

@@ -89,6 +89,14 @@ public class Q00416_PathOfTheOrcShaman extends Quest
 		// Does not exist in client.
 		// addKillId(BLACK_LEOPARD);
 		registerQuestItems(FIRE_CHARM, KASHA_BEAR_PELT, KASHA_BLADE_SPIDER_HUSK, FIRST_FIERY_EGG, HESTUI_MASK, SECOND_FIERY_EGG, TOTEM_SPIRIT_CLAW, TATARUS_LETTER, FLAME_CHARM, GRIZZLY_BLOOD, BLOOD_CAULDRON, SPIRIT_NET, BOUND_DURKA_SPIRIT, DURKA_PARASITE, TOTEM_SPIRIT_BLOOD);
+		
+		// Add start condition to accept all magical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+				   (playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE) || 
+				   (playerClass == PlayerClass.ORC_SHAMAN);
+		}, "30585-03.htm");
 	}
 	
 	@Override
@@ -105,28 +113,34 @@ public class Q00416_PathOfTheOrcShaman extends Quest
 		{
 			case "START":
 			{
-				if (player.getPlayerClass() != PlayerClass.ORC_MAGE)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all magical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+					(playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE))
 				{
-					if (player.getPlayerClass() == PlayerClass.ORC_SHAMAN)
+					if (player.getLevel() >= MIN_LEVEL)
 					{
-						htmltext = "30585-02.htm";
+						if (hasQuestItems(player, MASK_OF_MEDIUM))
+						{
+							htmltext = "30585-05.htm";
+						}
+						else
+						{
+							htmltext = "30585-06.htm";
+						}
 					}
 					else
 					{
-						htmltext = "30585-03.htm";
+						htmltext = "30585-04.htm";
 					}
 				}
-				else if (player.getLevel() < MIN_LEVEL)
+				else if (playerClass == PlayerClass.ORC_SHAMAN)
 				{
-					htmltext = "30585-04.htm";
-				}
-				else if (hasQuestItems(player, MASK_OF_MEDIUM))
-				{
-					htmltext = "30585-05.htm";
+					htmltext = "30585-02.htm";
 				}
 				else
 				{
-					htmltext = "30585-06.htm";
+					htmltext = "30585-03.htm";
 				}
 				break;
 			}

@@ -67,6 +67,14 @@ public class Q00418_PathOfTheArtisan extends Quest
 		addTalkId(BLACKSMITH_SILVERA, BLACKSMITH_PINTER, BLACKSMITH_KLUTO, IRON_GATES_LOCKIRIN);
 		addKillId(VUKU_ORC_FIGHTER, BOOGLE_RATMAN, BOOGLE_RATMAN_LEADER);
 		registerQuestItems(SILVERYS_RING, PASS_1ST_CERTIFICATE, PASS_2ND_CERTIFICATE, BOOGLE_RATMAN_TOOTH, BOOGLE_RATMAN_LEADERS_TOOTH, KLUTOS_LETTER, FOOTPRINT_OF_THIEF, STOLEN_SECRET_BOX, SECRET_BOX);
+		
+		// Add start condition to accept all physical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+				   (playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+				   (playerClass == PlayerClass.DWARVEN_FIGHTER) || (playerClass == PlayerClass.ARTISAN);
+		}, "30527-02.htm");
 	}
 	
 	@Override
@@ -83,7 +91,11 @@ public class Q00418_PathOfTheArtisan extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.DWARVEN_FIGHTER)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all physical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+					(playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+					(playerClass == PlayerClass.DWARVEN_FIGHTER))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -101,7 +113,7 @@ public class Q00418_PathOfTheArtisan extends Quest
 						htmltext = "30527-03.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.ARTISAN)
+				else if (playerClass == PlayerClass.ARTISAN)
 				{
 					htmltext = "30527-02a.htm";
 				}

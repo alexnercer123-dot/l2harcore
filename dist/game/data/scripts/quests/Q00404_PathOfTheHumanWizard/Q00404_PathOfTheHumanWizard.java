@@ -74,6 +74,14 @@ public class Q00404_PathOfTheHumanWizard extends Quest
 		addTalkId(PARINA, EARTH_SNAKE, WASTELAND_LIZARDMAN, FLAME_SALAMANDER, WIND_SYLPH, WATER_UNDINE);
 		addKillId(RED_BEAR, RATMAN_WARRIOR, WATER_SEER);
 		registerQuestItems(MAP_OF_LUSTER, KEY_OF_FLAME, FLAME_EARING, BROKEN_BRONZE_MIRROR, WIND_FEATHER, WIND_BANGLE, RAMAS_DIARY, SPARKLE_PEBBLE, WATER_NECKLACE, RUSTY_COIN, RED_SOIL, EARTH_RING);
+		
+		// Add start condition to accept all magical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+				   (playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE) || 
+				   (playerClass == PlayerClass.WIZARD);
+		}, "30391-01.htm");
 	}
 	
 	@Override
@@ -90,7 +98,10 @@ public class Q00404_PathOfTheHumanWizard extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.MAGE)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all magical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+					(playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -109,7 +120,7 @@ public class Q00404_PathOfTheHumanWizard extends Quest
 						htmltext = "30391-02.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.WIZARD)
+				else if (playerClass == PlayerClass.WIZARD)
 				{
 					htmltext = "30391-02a.htm";
 				}

@@ -69,6 +69,14 @@ public class Q00405_PathOfTheCleric extends Quest
 		addTalkId(ZIGAUNT, GALLINT, VIVYAN, TRADER_SIMPLON, GUARD_PRAGA, LIONEL);
 		addKillId(RUIN_ZOMBIE, RUIN_ZOMBIE_LEADER);
 		registerQuestItems(LETTER_OF_ORDER_1ST, LETTER_OF_ORDER_2ND, LIONELS_BOOK, BOOK_OF_VIVYAN, BOOK_OF_SIMPLON, BOOK_OF_PRAGA, CERTIFICATE_OF_GALLINT, PENDANT_OF_MOTHER, NECKLACE_OF_MOTHER, LEMONIELLS_COVENANT);
+		
+		// Add start condition to accept all magical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+				   (playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE) || 
+				   (playerClass == PlayerClass.CLERIC);
+		}, "30022-02.htm");
 	}
 	
 	@Override
@@ -85,7 +93,10 @@ public class Q00405_PathOfTheCleric extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.MAGE)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all magical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+					(playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -105,7 +116,7 @@ public class Q00405_PathOfTheCleric extends Quest
 						htmltext = "30022-03.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.CLERIC)
+				else if (playerClass == PlayerClass.CLERIC)
 				{
 					htmltext = "30022-02a.htm";
 				}

@@ -68,6 +68,14 @@ public class Q00407_PathOfTheElvenScout extends Quest
 		addKillId(OL_MAHUM_PATROL, OL_MAHUM_SENTRY);
 		addAttackId(OL_MAHUM_PATROL, OL_MAHUM_SENTRY);
 		registerQuestItems(REISAS_LETTER, PRIASS_1ND_TORN_LETTER, PRIASS_2ND_TORN_LETTER, PRIASS_3ND_TORN_LETTER, PRIASS_4ND_TORN_LETTER, MORETTIES_HERB, MORETTIS_LETTER, PRIASS_LETTER, HONORARY_GUARD, RUSTED_KEY);
+		
+		// Add start condition to accept all physical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+				   (playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+				   (playerClass == PlayerClass.DWARVEN_FIGHTER) || (playerClass == PlayerClass.ELVEN_SCOUT);
+		}, "30328-02.htm");
 	}
 	
 	@Override
@@ -84,7 +92,11 @@ public class Q00407_PathOfTheElvenScout extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.ELVEN_FIGHTER)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all physical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+					(playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+					(playerClass == PlayerClass.DWARVEN_FIGHTER))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -105,7 +117,7 @@ public class Q00407_PathOfTheElvenScout extends Quest
 						htmltext = "30328-03.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.ELVEN_SCOUT)
+				else if (playerClass == PlayerClass.ELVEN_SCOUT)
 				{
 					htmltext = "30328-02a.htm";
 				}

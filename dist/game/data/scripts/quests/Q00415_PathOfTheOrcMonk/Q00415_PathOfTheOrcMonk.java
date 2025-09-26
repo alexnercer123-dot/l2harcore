@@ -91,6 +91,14 @@ public class Q00415_PathOfTheOrcMonk extends Quest
 		addAttackId(FELIM_LIZARDMAN_WARRIOR, VUKU_ORC_FIGHTER, LANGK_LIZZARDMAN_WARRIOR, RATMAN_WARRIOR, SCARLET_SALAMANDER, KASHA_FANG_SPIDER, KASHA_BLADE_SPIDER, KASHA_BEAR, BAAR_DRE_VANUL);
 		addKillId(FELIM_LIZARDMAN_WARRIOR, VUKU_ORC_FIGHTER, LANGK_LIZZARDMAN_WARRIOR, RATMAN_WARRIOR, SCARLET_SALAMANDER, KASHA_FANG_SPIDER, KASHA_BLADE_SPIDER, KASHA_BEAR, BAAR_DRE_VANUL);
 		registerQuestItems(POMEGRANATE, LEATHER_POUCH_1ST, LEATHER_POUCH_2ND, LEATHER_POUCH_3RD, LEATHER_POUCH_1ST_FULL, LEATHER_POUCH_2ND_FULL, LEATHER_POUCH_3RD_FULL, KASHA_BEAR_CLAW, KASHA_BLADE_SPIDER_TALON, SCARLET_SALAMANDER_SCALE, FIERY_SPIRIT_SCROLL, ROSHEEKS_LETTER, GANTAKIS_LETTRT_OF_RECOMMENDATION, FIG, LEATHER_POUCH_4TF, LEATHER_POUCH_4TF_FULL, VUKU_ORK_TUSK, RATMAN_FANG, LANGK_LIZARDMAN_TOOTH, FELIM_LIZARDMAN_TOOTH, IRON_WILL_SCROLL, TORUKUS_LETTER, KASHA_SPIDERS_TOOTH, HORN_OF_BAAR_DRE_VANUL);
+		
+		// Add start condition to accept all physical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+				   (playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+				   (playerClass == PlayerClass.DWARVEN_FIGHTER) || (playerClass == PlayerClass.ORC_MONK);
+		}, "30587-02.htm");
 	}
 	
 	@Override
@@ -107,7 +115,11 @@ public class Q00415_PathOfTheOrcMonk extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.ORC_FIGHTER)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all physical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+					(playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+					(playerClass == PlayerClass.DWARVEN_FIGHTER))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -125,7 +137,7 @@ public class Q00415_PathOfTheOrcMonk extends Quest
 						htmltext = "30587-03.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.ORC_MONK)
+				else if (playerClass == PlayerClass.ORC_MONK)
 				{
 					htmltext = "30587-02a.htm";
 				}

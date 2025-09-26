@@ -67,6 +67,14 @@ public class Q00413_PathOfTheShillienOracle extends Quest
 		addTalkId(MAGISTER_SIDRA, PRIEST_ADONIUS, MAGISTER_TALBOT);
 		addKillId(ZOMBIE_SOLDIER, ZOMBIE_WARRIOR, SHIELD_SKELETON, SKELETON_INFANTRYMAN, DARK_SUCCUBUS);
 		registerQuestItems(SIDRAS_LETTER, BLANK_SHEET, BLOODY_RUNE, GARMIELS_BOOK, PRAYER_OF_ADONIUS, PENITENTS_MARK, ASHEN_BONES, ANDARIEL_BOOK);
+		
+		// Add start condition to accept all magical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+				   (playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE) || 
+				   (playerClass == PlayerClass.SHILLIEN_ORACLE);
+		}, "30330-03.htm");
 	}
 	
 	@Override
@@ -83,7 +91,10 @@ public class Q00413_PathOfTheShillienOracle extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.DARK_MAGE)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all magical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+					(playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -101,7 +112,7 @@ public class Q00413_PathOfTheShillienOracle extends Quest
 						htmltext = "30330-02.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.SHILLIEN_ORACLE)
+				else if (playerClass == PlayerClass.SHILLIEN_ORACLE)
 				{
 					htmltext = "30330-02a.htm";
 				}

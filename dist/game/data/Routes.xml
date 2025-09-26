@@ -41,5 +41,34 @@
 		<point X="81413" Y="149700" Z="-3469" delay="52" run="true" /> <!-- Clan Hall Managers -->
 		<point X="82815" Y="148840" Z="-3469" delay="3" run="true" />
 		<point X="83318" Y="148422" Z="-3406" delay="0" run="true" />
+	</route> 
+	
+	<!-- Caravan Route DISABLED - NPC is now a raid boss
+	<route name="dion_floran_caravan" repeat="true" repeatStyle="cycle">
+		<target id="900009" spawnX="17438" spawnY="147454" spawnZ="-3120" />
+		<point X="17438" Y="147454" Z="-3120" delay="3" run="true" string="Starting from Dion..." />
+		<point X="17293" Y="148303" Z="-3249" delay="2" run="true" string="" />
+		<point X="17368" Y="149238" Z="-3345" delay="2" run="true" string="" />
+		<point X="17631" Y="150142" Z="-3329" delay="2" run="true" string="" />
+		<point X="17852" Y="150732" Z="-3265" delay="2" run="true" string="" />
+		<point X="18275" Y="151935" Z="-3281" delay="2" run="true" string="" />
+		<point X="18464" Y="152766" Z="-3393" delay="2" run="true" string="" />
+		<point X="18428" Y="154562" Z="-3585" delay="2" run="true" string="" />
+		<point X="18076" Y="155770" Z="-3633" delay="2" run="true" string="" />
+		<point X="17411" Y="157222" Z="-3601" delay="2" run="true" string="" />
+		<point X="17054" Y="157979" Z="-3553" delay="2" run="true" string="" />
+		<point X="16883" Y="159368" Z="-3521" delay="2" run="true" string="" />
+		<point X="16522" Y="160897" Z="-3569" delay="2" run="true" string="" />
+		<point X="16825" Y="162904" Z="-3633" delay="2" run="true" string="" />
+		<point X="17366" Y="164103" Z="-3656" delay="2" run="true" string="" />
+		<point X="18365" Y="165665" Z="-3608" delay="2" run="true" string="" />
+		<point X="17893" Y="166648" Z="-3592" delay="2" run="true" string="" />
+		<point X="16966" Y="166931" Z="-3496" delay="2" run="true" string="" />
+		<point X="15620" Y="167186" Z="-3576" delay="2" run="true" string="" />
+		<point X="14885" Y="167624" Z="-3624" delay="2" run="true" string="" />
+		<point X="15013" Y="168348" Z="-3504" delay="2" run="true" string="" />
+		<point X="15544" Y="169025" Z="-3488" delay="2" run="true" string="" />
+		<point X="16852" Y="170091" Z="-3480" delay="5" run="true" string="Arrived at destination!" />
 	</route>
+	-->
 </routes>

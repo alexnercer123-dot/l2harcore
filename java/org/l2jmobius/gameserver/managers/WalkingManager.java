@@ -263,6 +263,16 @@ public class WalkingManager implements IXmlReader
 	}
 	
 	/**
+	 * Retrieves the WalkInfo for the specified NPC for debugging purposes.
+	 * @param npc the {@link Npc} whose WalkInfo is requested
+	 * @return the WalkInfo object, or null if the NPC is not on a route
+	 */
+	public WalkInfo getWalkInfo(Npc npc)
+	{
+		return _activeRoutes.get(npc.getObjectId());
+	}
+	
+	/**
 	 * Retrieves the name of the route assigned to the specified NPC.
 	 * @param npc the {@link Npc} whose route name is requested
 	 * @return the name of the route, or an empty string if the NPC is not on a route
@@ -383,6 +393,26 @@ public class WalkingManager implements IXmlReader
 				task.cancel(true);
 			}
 		}
+		
+		// Cancel and remove ArrivedTask
+		final ScheduledFuture<?> arrivedTask = _arriveTasks.remove(npc);
+		if (arrivedTask != null)
+		{
+			arrivedTask.cancel(true);
+		}
+		
+		// Cancel and remove other tasks
+		final ScheduledFuture<?> startTask = _startMoveTasks.remove(npc);
+		if (startTask != null)
+		{
+			startTask.cancel(true);
+		}
+		
+		final ScheduledFuture<?> repeatTask = _repeatMoveTasks.remove(npc);
+		if (repeatTask != null)
+		{
+			repeatTask.cancel(true);
+		}
 	}
 	
 	/**
@@ -479,7 +509,8 @@ public class WalkingManager implements IXmlReader
 		final ScheduledFuture<?> task = _arriveTasks.get(npc);
 		if ((task == null) || task.isCancelled() || task.isDone())
 		{
-			_arriveTasks.put(npc, ThreadPool.schedule(new ArrivedTask(npc, walk), 100 + (node.getDelay() * 1000)));
+			final int delay = 100 + (node.getDelay() * 1000);
+			_arriveTasks.put(npc, ThreadPool.schedule(new ArrivedTask(npc, walk), delay));
 		}
 	}
 	

@@ -92,6 +92,14 @@ public class Q00402_PathOfTheHumanKnight extends Quest
 		addTalkId(SIR_KLAUS_VASPER, HIGH_PRIEST_BIOTIN, LEVIAN, HIGH_PRIEST_RAYMOND, CAPTAIN_GILBERT, CAPTAIN_BATHIS, CAPTAIN_BEZIQUE, SIR_ARON_TANFORD);
 		addKillId(LANGK_LIZARDMAN_WARRIOR, LANGK_LIZARDMAN_SCOUT, LANGK_LIZARDMAN, VENOMOUS_SPIDER, ARACHNID_TRACKER, ARACHNID_PREDATOR, GIANT_SPIDER, TALON_SPIDER, BLADE_SPIDER, SILENT_HORROR, BUGBEAR_RAIDER, UNDEAD_PRIEST);
 		registerQuestItems(SQUIRES_MARK, COIN_OF_LORDS1, COIN_OF_LORDS2, COIN_OF_LORDS3, COIN_OF_LORDS4, COIN_OF_LORDS5, COIN_OF_LORDS6, GLUDIO_GUARDS_1ST_BADGE, BUGBEAR_NECKLACE, EINHASADS_1ST_TEMPLE_BADGE, EINHASAD_CRUCIFIX, GLUDIO_GUARDS_2ND_BADGE, VENOMOUS_SPIDERS_LEG, EINHASADS_2ND_TEMPLE_BADGE, LIZARDMANS_TOTEM, GLUDIO_GUARDS_3RD_BADGE, GIANT_SPIDERS_HUSK, EINHASADS_3RD_TEMPLE_BADGE, SKULL_OF_SILENT_HORROR);
+		
+		// Add start condition to accept all physical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+				   (playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+				   (playerClass == PlayerClass.DWARVEN_FIGHTER) || (playerClass == PlayerClass.KNIGHT);
+		}, "30417-03.htm");
 	}
 	
 	@Override
@@ -109,7 +117,11 @@ public class Q00402_PathOfTheHumanKnight extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.FIGHTER)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all physical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+					(playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+					(playerClass == PlayerClass.DWARVEN_FIGHTER))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -127,7 +139,7 @@ public class Q00402_PathOfTheHumanKnight extends Quest
 						htmltext = "30417-02.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.KNIGHT)
+				else if (playerClass == PlayerClass.KNIGHT)
 				{
 					htmltext = "30417-02a.htm";
 				}

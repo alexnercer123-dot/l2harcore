@@ -63,6 +63,14 @@ public class Q00410_PathOfThePalusKnight extends Quest
 		addTalkId(MASTER_VIRGIL, KALINTA);
 		addKillId(VENOMOUS_SPIDER, ARACHNID_TRACKER, LYCANTHROPE);
 		registerQuestItems(PALLUS_TALISMAN, LYCANTHROPE_SKULL, VIRGILS_LETTER, MORTE_TALISMAN, VENOMOUS_SPIDERS_CARAPACE, ARACHNID_TRACKER_SILK, COFFIN_OF_ETERNAL_REST);
+		
+		// Add start condition to accept all physical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+				   (playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+				   (playerClass == PlayerClass.DWARVEN_FIGHTER) || (playerClass == PlayerClass.PALUS_KNIGHT);
+		}, "30329-03.htm");
 	}
 	
 	@Override
@@ -79,7 +87,11 @@ public class Q00410_PathOfThePalusKnight extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.DARK_FIGHTER)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all physical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+					(playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+					(playerClass == PlayerClass.DWARVEN_FIGHTER))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -97,7 +109,7 @@ public class Q00410_PathOfThePalusKnight extends Quest
 						htmltext = "30329-02.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.PALUS_KNIGHT)
+				else if (playerClass == PlayerClass.PALUS_KNIGHT)
 				{
 					htmltext = "30329-02a.htm";
 				}

@@ -71,6 +71,14 @@ public class Q00408_PathOfTheElvenWizard extends Quest
 		addTalkId(ROSSELA, GREENIS, THALIA, NORTHWIND);
 		addKillId(DRYAD_ELDER, SUKAR_WERERAT_LEADER, PINCER_SPIDER);
 		registerQuestItems(ROSELLAS_LETTER, RED_DOWN, MAGICAL_POWERS_RUBY, PURE_AQUAMARINE, APPETIZING_APPLE, GOLD_LEAVES, IMMORTAL_LOVE, AMETHYST, NOBILITY_AMETHYST, FERTILITY_PERIDOT, GREENISS_CHARM, SAP_OF_THE_MOTHER_TREE, LUCKY_POTPOURRI);
+		
+		// Add start condition to accept all magical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+				   (playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE) || 
+				   (playerClass == PlayerClass.ELVEN_WIZARD);
+		}, "30414-03.htm");
 	}
 	
 	@Override
@@ -87,34 +95,40 @@ public class Q00408_PathOfTheElvenWizard extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() != PlayerClass.ELVEN_MAGE)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all magical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.MAGE) || (playerClass == PlayerClass.ELVEN_MAGE) || 
+					(playerClass == PlayerClass.DARK_MAGE) || (playerClass == PlayerClass.ORC_MAGE))
 				{
-					if (player.getPlayerClass() == PlayerClass.ELVEN_WIZARD)
+					if (player.getLevel() >= MIN_LEVEL)
 					{
-						htmltext = "30414-02a.htm";
+						if (hasQuestItems(player, ETERNITY_DIAMOND))
+						{
+							htmltext = "30414-05.htm";
+						}
+						else
+						{
+							if (!hasQuestItems(player, FERTILITY_PERIDOT))
+							{
+								giveItems(player, FERTILITY_PERIDOT, 1);
+							}
+							
+							qs.startQuest();
+							htmltext = "30414-06.htm";
+						}
 					}
 					else
 					{
-						htmltext = "30414-03.htm";
+						htmltext = "30414-04.htm";
 					}
 				}
-				else if (player.getLevel() < MIN_LEVEL)
+				else if (playerClass == PlayerClass.ELVEN_WIZARD)
 				{
-					htmltext = "30414-04.htm";
-				}
-				else if (hasQuestItems(player, ETERNITY_DIAMOND))
-				{
-					htmltext = "30414-05.htm";
+					htmltext = "30414-02a.htm";
 				}
 				else
 				{
-					if (!hasQuestItems(player, FERTILITY_PERIDOT))
-					{
-						giveItems(player, FERTILITY_PERIDOT, 1);
-					}
-					
-					qs.startQuest();
-					htmltext = "30414-06.htm";
+					htmltext = "30414-03.htm";
 				}
 				break;
 			}

@@ -67,6 +67,14 @@ public class Q00414_PathOfTheOrcRaider extends Quest
 		addTalkId(PREFECT_KARUKIA, PREFRCT_KASMAN);
 		addKillId(KURUKA_RATMAN_LEADER, UMBAR_ORC, GOBLIN_TOMB_RAIDER_LEADER);
 		registerQuestItems(GREEN_BLOOD, GOBLIN_DWELLING_MAP, KURUKA_RATMAN_TOOTH, BETRAYER_UMBAR_REPORT, BETRAYER_ZAKAN_REPORT, HEAD_OF_BETRAYER, TIMORA_ORC_HEAD);
+		
+		// Add start condition to accept all physical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+				   (playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+				   (playerClass == PlayerClass.DWARVEN_FIGHTER) || (playerClass == PlayerClass.ORC_RAIDER);
+		}, "30570-03.htm");
 	}
 	
 	@Override
@@ -83,7 +91,11 @@ public class Q00414_PathOfTheOrcRaider extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.ORC_FIGHTER)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all physical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+					(playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+					(playerClass == PlayerClass.DWARVEN_FIGHTER))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -107,7 +119,7 @@ public class Q00414_PathOfTheOrcRaider extends Quest
 						htmltext = "30570-02.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.ORC_RAIDER)
+				else if (playerClass == PlayerClass.ORC_RAIDER)
 				{
 					htmltext = "30570-02a.htm";
 				}

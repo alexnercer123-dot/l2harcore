@@ -40,6 +40,7 @@ import org.l2jmobius.gameserver.util.LocationUtil;
  */
 public class Q00403_PathOfTheRogue extends Quest
 {
+	
 	// NPCs
 	private static final int CAPTAIN_BEZIQUE = 30379;
 	private static final int NETI = 30425;
@@ -95,6 +96,14 @@ public class Q00403_PathOfTheRogue extends Quest
 		addKillId(MONSTER_DROPS.keySet());
 		addKillId(CATS_EYE_BANDIT);
 		registerQuestItems(BEZIQUES_LETTER, NETIS_BOW, NETIS_DAGGER, SPARTOIS_BONES, HORSESHOE_OF_LIGHT, MOST_WANTED_LIST, STOLEN_JEWELRY, STOLEN_TOMES, STOLEN_RING, STOLEN_NECKLACE);
+		
+		// Add start condition to accept all physical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+				   (playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+				   (playerClass == PlayerClass.DWARVEN_FIGHTER) || (playerClass == PlayerClass.ROGUE);
+		}, "30379-02.htm");
 	}
 	
 	@Override
@@ -111,7 +120,12 @@ public class Q00403_PathOfTheRogue extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.FIGHTER)
+				// Accept all physical base classes for cross-race transfers
+				final PlayerClass playerClass = player.getPlayerClass();
+				
+				if ((playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+					(playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+					(playerClass == PlayerClass.DWARVEN_FIGHTER))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -275,13 +289,60 @@ public class Q00403_PathOfTheRogue extends Quest
 	@Override
 	public String onTalk(Npc npc, Player player)
 	{
+		LOGGER.info("[Q00403_PathOfTheRogue] onTalk called - Player: " + player.getName() + ", Class: " + player.getPlayerClass() + ", NPC: " + npc.getId());
+		
 		final QuestState qs = getQuestState(player, true);
 		String htmltext = getNoQuestMsg(player);
+		LOGGER.info("[Q00403_PathOfTheRogue] QuestState: " + (qs != null ? qs.getState() : "null") + ", Default htmltext: " + htmltext);
+		
 		if (qs.isCreated())
 		{
+			LOGGER.info("[Q00403_PathOfTheRogue] Quest state is CREATED for player: " + player.getName());
 			if (npc.getId() == CAPTAIN_BEZIQUE)
 			{
-				htmltext = "30379-01.htm";
+				LOGGER.info("[Q00403_PathOfTheRogue] Talking to CAPTAIN_BEZIQUE, checking player eligibility");
+				// Check if player can take this quest (any physical base class)
+				final PlayerClass playerClass = player.getPlayerClass();
+				LOGGER.info("[Q00403_PathOfTheRogue] Player class: " + playerClass + ", Level: " + player.getLevel());
+				
+				if ((playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+					(playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+					(playerClass == PlayerClass.DWARVEN_FIGHTER))
+				{
+					LOGGER.info("[Q00403_PathOfTheRogue] Player class is valid physical class");
+					if (player.getLevel() >= MIN_LEVEL)
+					{
+						if (hasQuestItems(player, BEZIQUES_RECOMMENDATION))
+						{
+							LOGGER.info("[Q00403_PathOfTheRogue] Player already has recommendation - showing 30379-04.htm");
+							htmltext = "30379-04.htm";
+						}
+						else
+						{
+							LOGGER.info("[Q00403_PathOfTheRogue] Player eligible for quest - showing 30379-01.htm");
+							htmltext = "30379-01.htm";
+						}
+					}
+					else
+					{
+						LOGGER.info("[Q00403_PathOfTheRogue] Player level too low - showing 30379-03.htm");
+						htmltext = "30379-03.htm";
+					}
+				}
+				else if (playerClass == PlayerClass.ROGUE)
+				{
+					LOGGER.info("[Q00403_PathOfTheRogue] Player is already ROGUE - showing 30379-02a.htm");
+					htmltext = "30379-02a.htm";
+				}
+				else
+				{
+					LOGGER.info("[Q00403_PathOfTheRogue] Player class not allowed - showing 30379-02.htm");
+					htmltext = "30379-02.htm";
+				}
+			}
+			else
+			{
+				LOGGER.info("[Q00403_PathOfTheRogue] Not talking to CAPTAIN_BEZIQUE, npc: " + npc.getId());
 			}
 		}
 		
@@ -380,6 +441,7 @@ public class Q00403_PathOfTheRogue extends Quest
 			}
 		}
 		
+		LOGGER.info("[Q00403_PathOfTheRogue] onTalk returning htmltext: " + htmltext);
 		return htmltext;
 	}
 }

@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.l2jmobius.gameserver.model.actor.enums.creature.Race;
 
@@ -214,6 +215,9 @@ public enum PlayerClass
 	EVISCERATOR(188, false, Race.ERTHEIA, RIPPER),
 	SAYHA_SEER(189, true, Race.ERTHEIA, STRATOMANCER);
 	
+	/** Logger for PlayerClass */
+	private static final Logger LOGGER = Logger.getLogger(PlayerClass.class.getName());
+	
 	/** The Identifier of the Class */
 	private final int _id;
 	
@@ -240,6 +244,117 @@ public enum PlayerClass
 		{
 			_classMap.put(playerClass.getId(), playerClass);
 		}
+		
+		// Allow cross-race physical class transfers for first-level classes
+		setupCrossRacePhysicalTransfers();
+	}
+	
+	/**
+	 * Sets up cross-race transfers for physical fighter classes to allow any physical base class
+	 * to transfer to any first-level physical profession regardless of race.
+	 */
+	private static void setupCrossRacePhysicalTransfers()
+	{
+		// Allow cross-race transfers for physical classes
+		setupPhysicalClassTransfers();
+		
+		// Allow cross-race transfers for magical classes
+		setupMagicalClassTransfers();
+	}
+	
+	/**
+	 * Sets up cross-race transfers for physical fighter classes.
+	 */
+	private static void setupPhysicalClassTransfers()
+	{
+		// Human Fighter -> All first physical classes
+		FIGHTER.addNextClass(ELVEN_KNIGHT);
+		FIGHTER.addNextClass(ELVEN_SCOUT);
+		FIGHTER.addNextClass(PALUS_KNIGHT);
+		FIGHTER.addNextClass(ASSASSIN);
+		FIGHTER.addNextClass(ORC_RAIDER);
+		FIGHTER.addNextClass(ORC_MONK);
+		FIGHTER.addNextClass(SCAVENGER);
+		FIGHTER.addNextClass(ARTISAN);
+		
+		// Elven Fighter -> All first physical classes
+		ELVEN_FIGHTER.addNextClass(WARRIOR);
+		ELVEN_FIGHTER.addNextClass(KNIGHT);
+		ELVEN_FIGHTER.addNextClass(ROGUE);
+		ELVEN_FIGHTER.addNextClass(PALUS_KNIGHT);
+		ELVEN_FIGHTER.addNextClass(ASSASSIN);
+		ELVEN_FIGHTER.addNextClass(ORC_RAIDER);
+		ELVEN_FIGHTER.addNextClass(ORC_MONK);
+		ELVEN_FIGHTER.addNextClass(SCAVENGER);
+		ELVEN_FIGHTER.addNextClass(ARTISAN);
+		
+		// Dark Elven Fighter -> All first physical classes
+		DARK_FIGHTER.addNextClass(WARRIOR);
+		DARK_FIGHTER.addNextClass(KNIGHT);
+		DARK_FIGHTER.addNextClass(ROGUE);
+		DARK_FIGHTER.addNextClass(ELVEN_KNIGHT);
+		DARK_FIGHTER.addNextClass(ELVEN_SCOUT);
+		DARK_FIGHTER.addNextClass(ORC_RAIDER);
+		DARK_FIGHTER.addNextClass(ORC_MONK);
+		DARK_FIGHTER.addNextClass(SCAVENGER);
+		DARK_FIGHTER.addNextClass(ARTISAN);
+		
+		// Orc Fighter -> All first physical classes
+		ORC_FIGHTER.addNextClass(WARRIOR);
+		ORC_FIGHTER.addNextClass(KNIGHT);
+		ORC_FIGHTER.addNextClass(ROGUE);
+		ORC_FIGHTER.addNextClass(ELVEN_KNIGHT);
+		ORC_FIGHTER.addNextClass(ELVEN_SCOUT);
+		ORC_FIGHTER.addNextClass(PALUS_KNIGHT);
+		ORC_FIGHTER.addNextClass(ASSASSIN);
+		ORC_FIGHTER.addNextClass(SCAVENGER);
+		ORC_FIGHTER.addNextClass(ARTISAN);
+		
+		// Dwarven Fighter -> All first physical classes
+		DWARVEN_FIGHTER.addNextClass(WARRIOR);
+		DWARVEN_FIGHTER.addNextClass(KNIGHT);
+		DWARVEN_FIGHTER.addNextClass(ROGUE);
+		DWARVEN_FIGHTER.addNextClass(ELVEN_KNIGHT);
+		DWARVEN_FIGHTER.addNextClass(ELVEN_SCOUT);
+		DWARVEN_FIGHTER.addNextClass(PALUS_KNIGHT);
+		DWARVEN_FIGHTER.addNextClass(ASSASSIN);
+		DWARVEN_FIGHTER.addNextClass(ORC_RAIDER);
+		DWARVEN_FIGHTER.addNextClass(ORC_MONK);
+	}
+	
+	/**
+	 * Sets up cross-race transfers for magical mage classes.
+	 */
+	private static void setupMagicalClassTransfers()
+	{
+		// Human Mage -> All first magical classes
+		MAGE.addNextClass(ELVEN_WIZARD);
+		MAGE.addNextClass(ORACLE);
+		MAGE.addNextClass(DARK_WIZARD);
+		MAGE.addNextClass(SHILLIEN_ORACLE);
+		MAGE.addNextClass(ORC_SHAMAN);
+		
+		// Elven Mage -> All first magical classes
+		ELVEN_MAGE.addNextClass(WIZARD);
+		ELVEN_MAGE.addNextClass(CLERIC);
+		ELVEN_MAGE.addNextClass(DARK_WIZARD);
+		ELVEN_MAGE.addNextClass(SHILLIEN_ORACLE);
+		ELVEN_MAGE.addNextClass(ORC_SHAMAN);
+		
+		// Dark Elven Mage -> All first magical classes
+		DARK_MAGE.addNextClass(WIZARD);
+		DARK_MAGE.addNextClass(CLERIC);
+		DARK_MAGE.addNextClass(ELVEN_WIZARD);
+		DARK_MAGE.addNextClass(ORACLE);
+		DARK_MAGE.addNextClass(ORC_SHAMAN);
+		
+		// Orc Mage -> All first magical classes
+		ORC_MAGE.addNextClass(WIZARD);
+		ORC_MAGE.addNextClass(CLERIC);
+		ORC_MAGE.addNextClass(ELVEN_WIZARD);
+		ORC_MAGE.addNextClass(ORACLE);
+		ORC_MAGE.addNextClass(DARK_WIZARD);
+		ORC_MAGE.addNextClass(SHILLIEN_ORACLE);
 	}
 	
 	/**

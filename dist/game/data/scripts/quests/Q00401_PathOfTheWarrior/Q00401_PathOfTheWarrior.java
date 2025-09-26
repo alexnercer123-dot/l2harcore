@@ -66,6 +66,14 @@ public class Q00401_PathOfTheWarrior extends Quest
 		addAttackId(VENOMOUS_SPIDERS, ARACHNID_TRACKER);
 		addKillId(TRACKER_SKELETON, VENOMOUS_SPIDERS, TRACKER_SKELETON_LIDER, ARACHNID_TRACKER);
 		registerQuestItems(AURONS_LETTER, WARRIOR_GUILD_MARK, RUSTED_BRONZE_SWORD1, RUSTED_BRONZE_SWORD2, RUSTED_BRONZE_SWORD3, SIMPLONS_LETTER, VENOMOUS_SPIDERS_LEG);
+		
+		// Add start condition to accept all physical base classes for cross-race transfers
+		addCondStart(p -> {
+			final PlayerClass playerClass = p.getPlayerClass();
+			return (playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+				   (playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+				   (playerClass == PlayerClass.DWARVEN_FIGHTER) || (playerClass == PlayerClass.WARRIOR);
+		}, "30010-03.htm");
 	}
 	
 	@Override
@@ -82,7 +90,11 @@ public class Q00401_PathOfTheWarrior extends Quest
 		{
 			case "ACCEPT":
 			{
-				if (player.getPlayerClass() == PlayerClass.FIGHTER)
+				final PlayerClass playerClass = player.getPlayerClass();
+				// Accept all physical base classes for cross-race transfers
+				if ((playerClass == PlayerClass.FIGHTER) || (playerClass == PlayerClass.ELVEN_FIGHTER) || 
+					(playerClass == PlayerClass.DARK_FIGHTER) || (playerClass == PlayerClass.ORC_FIGHTER) || 
+					(playerClass == PlayerClass.DWARVEN_FIGHTER))
 				{
 					if (player.getLevel() >= MIN_LEVEL)
 					{
@@ -100,7 +112,7 @@ public class Q00401_PathOfTheWarrior extends Quest
 						htmltext = "30010-02.htm";
 					}
 				}
-				else if (player.getPlayerClass() == PlayerClass.WARRIOR)
+				else if (playerClass == PlayerClass.WARRIOR)
 				{
 					htmltext = "30010-02a.htm";
 				}
