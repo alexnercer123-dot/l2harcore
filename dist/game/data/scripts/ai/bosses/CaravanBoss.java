@@ -21,30 +21,22 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.l2jmobius.gameserver.enums.ChatType;
 import org.l2jmobius.gameserver.model.Location;
-import org.l2jmobius.gameserver.model.Party;
 import org.l2jmobius.gameserver.model.World;
 import org.l2jmobius.gameserver.model.actor.Attackable;
 import org.l2jmobius.gameserver.model.actor.Npc;
 import org.l2jmobius.gameserver.model.actor.Player;
-import org.l2jmobius.gameserver.model.events.EventType;
-import org.l2jmobius.gameserver.model.events.ListenerRegisterType;
-import org.l2jmobius.gameserver.model.events.annotations.RegisterEvent;
-import org.l2jmobius.gameserver.model.events.annotations.RegisterType;
-import org.l2jmobius.gameserver.model.events.impl.creature.OnCreatureAttacked;
-import org.l2jmobius.gameserver.model.events.impl.creature.OnCreatureDeath;
-import org.l2jmobius.gameserver.model.holders.ItemHolder;
-import org.l2jmobius.gameserver.model.itemcontainer.Inventory;
+import org.l2jmobius.gameserver.model.groups.Party;
+import org.l2jmobius.gameserver.model.item.holders.ItemHolder;
+import org.l2jmobius.gameserver.network.enums.ChatType;
 import org.l2jmobius.gameserver.network.serverpackets.CreatureSay;
-
-import ai.AbstractNpcAI;
+import org.l2jmobius.gameserver.model.quest.Quest;
 
 /**
  * Caravan Boss AI - Defensive raid boss with custom drop system
  * @author L2J Mobius
  */
-public class CaravanBoss extends AbstractNpcAI
+public class CaravanBoss extends Quest
 {
 	// NPC ID
 	private static final int CARAVAN_BOSS = 900009;
@@ -104,11 +96,13 @@ public class CaravanBoss extends AbstractNpcAI
 	
 	public CaravanBoss()
 	{
+		super(-1);
 		addAttackId(CARAVAN_BOSS);
+		addKillId(CARAVAN_BOSS);
 	}
 	
 	@Override
-	public String onAttack(Npc npc, Player attacker, int damage, boolean isSummon)
+	public void onAttack(Npc npc, Player attacker, int damage, boolean isSummon)
 	{
 		// Track damage for reward system
 		final int attackerId = attacker.getObjectId();
@@ -118,7 +112,7 @@ public class CaravanBoss extends AbstractNpcAI
 		final Party party = attacker.getParty();
 		if (party != null)
 		{
-			final int partyId = party.getLeaderObjectId();
+			final int partyId = party.getLeader().getObjectId();
 			_partyDamage.merge(partyId, damage, Integer::sum);
 		}
 		
@@ -132,20 +126,16 @@ public class CaravanBoss extends AbstractNpcAI
 		}
 		
 		// DO NOT call super.onAttack to prevent the NPC from fighting back
-		return null;
 	}
 	
-	@RegisterEvent(EventType.ON_CREATURE_DEATH)
-	@RegisterType(ListenerRegisterType.NPC)
-	public void onCreatureDeath(OnCreatureDeath event)
+	@Override
+	public void onKill(Npc npc, Player killer, boolean isSummon)
 	{
-		final Npc npc = (Npc) event.getTarget();
 		if (npc.getId() != CARAVAN_BOSS)
 		{
 			return;
 		}
 		
-		final Player killer = event.getAttacker() instanceof Player ? (Player) event.getAttacker() : null;
 		if (killer == null)
 		{
 			return;
@@ -167,12 +157,12 @@ public class CaravanBoss extends AbstractNpcAI
 		for (Map.Entry<Integer, Integer> entry : _playerDamage.entrySet())
 		{
 			final Player player = World.getInstance().getPlayer(entry.getKey());
-			if ((player != null) && (player.calculateDistance3D(npcLoc) <= 1500)) // Within reasonable range
+			if ((player != null) && (player.calculateDistance2D(npcLoc) <= 1500)) // Within reasonable range
 			{
 				// Give base rewards to all participants
 				for (ItemHolder reward : ALL_PARTICIPANT_REWARDS)
 				{
-					addItem(player, reward.getId(), reward.getCount());
+					giveItems(player, reward.getId(), reward.getCount());
 				}
 				
 				player.sendMessage("You have been rewarded for participating in the caravan raid!");
@@ -185,13 +175,13 @@ public class CaravanBoss extends AbstractNpcAI
 			// Give killer rewards
 			for (ItemHolder reward : KILLER_REWARDS)
 			{
-				addItem(killer, reward.getId(), reward.getCount());
+				giveItems(killer, reward.getId(), reward.getCount());
 			}
 			
 			// 10% chance for bonus item
 			if (ThreadLocalRandom.current().nextInt(100) < 10)
 			{
-				addItem(killer, KILLER_BONUS.getId(), KILLER_BONUS.getCount());
+				giveItems(killer, KILLER_BONUS.getId(), KILLER_BONUS.getCount());
 				killer.sendMessage("You received a bonus reward for delivering the final blow!");
 			}
 			
@@ -228,7 +218,7 @@ public class CaravanBoss extends AbstractNpcAI
 						final Player randomMember = getRandomNearbyPartyMember(topParty, npcLoc);
 						if (randomMember != null)
 						{
-							addItem(randomMember, ngItem.getId(), ngItem.getCount());
+							giveItems(randomMember, ngItem.getId(), ngItem.getCount());
 							randomMember.sendMessage("Your party dealt the most damage! You received an expensive NG grade item!");
 						}
 					}
@@ -243,7 +233,7 @@ public class CaravanBoss extends AbstractNpcAI
 		
 		for (Player member : party.getMembers())
 		{
-			if ((member != null) && member.isOnline() && (member.calculateDistance3D(npcLoc) <= 1500))
+			if ((member != null) && member.isOnline() && (member.calculateDistance2D(npcLoc) <= 1500))
 			{
 				nearbyMembers.add(member);
 			}

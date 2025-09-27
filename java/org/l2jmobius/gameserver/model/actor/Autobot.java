@@ -30,6 +30,7 @@ import org.l2jmobius.gameserver.model.actor.enums.creature.Race;
 import org.l2jmobius.gameserver.model.actor.enums.player.PlayerClass;
 import org.l2jmobius.gameserver.model.actor.templates.PlayerTemplate;
 import org.l2jmobius.gameserver.network.enums.ChatType;
+import org.l2jmobius.gameserver.ai.AutobotAI;
 
 /**
  * Autobot class - wrapper around Player to create visible AI-controlled players
@@ -41,11 +42,14 @@ public class Autobot
 	
 	private final Player _player;
 	private Location _homeLocation;
-	private int _autoFarmRadius = 1000;
+	private int _autoFarmRadius = 1000; // Limited radius to 1000
 	private boolean _autoFarmEnabled = false;
 	private boolean _isOnline = false;
 	private final PlayerClass _playerClass;
 	private final int _level;
+	private AutobotAI _autobotAI;
+	private long _lastChatTime = 0;
+	private int _chatCooldown = 5000; // 5 seconds between chats
 	
 	/**
 	 * Create an autobot using the Player.create factory method
@@ -104,6 +108,12 @@ public class Autobot
 		
 		// Set some basic stats based on level
 		initializeStats(level);
+		
+		// Initialize AI
+		_autobotAI = new AutobotAI(this);
+		_player.setAI(_autobotAI);
+		
+		LOGGER.info("Autobot AI initialized for: " + player.getName() + ", AI class: " + _autobotAI.getClass().getSimpleName());
 	}
 	
 	/**
@@ -125,10 +135,184 @@ public class Autobot
 			_player.setCurrentHp(_player.getMaxHp());
 			_player.setCurrentMp(_player.getMaxMp());
 			_player.setCurrentCp(_player.getMaxCp());
+			
+			// Give infinite mana to non-Orc mages for constant magic usage
+			if (_playerClass.isMage() && _playerClass.getRace() != org.l2jmobius.gameserver.model.actor.enums.creature.Race.ORC)
+			{
+				// Add a permanent stat modifier for infinite mana
+				_player.getStat().addFixedValue(org.l2jmobius.gameserver.model.stats.Stat.MAX_MP, 999999.0);
+				_player.setCurrentMp(999999);
+				LOGGER.info("Given infinite mana to non-Orc mage autobot: " + _player.getName());
+			}
+			
+			// Add Wind Strike skill for non-Orc mages only
+			if (_playerClass.isMage() && _playerClass.getRace() != org.l2jmobius.gameserver.model.actor.enums.creature.Race.ORC)
+			{
+				addWindStrikeSkill();
+			}
+					
+			// Equip starting items based on race and class
+			equipStartingItems();
 		}
 		catch (Exception e)
 		{
 			LOGGER.warning("Error initializing autobot stats: " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Add Wind Strike skill to mage autobots
+	 */
+	private void addWindStrikeSkill()
+	{
+		try
+		{
+			// Get Wind Strike skill (ID 1177, Level 1)
+			org.l2jmobius.gameserver.model.skill.Skill windStrike = 
+				org.l2jmobius.gameserver.data.xml.SkillData.getInstance().getSkill(1177, 1);
+			
+			if (windStrike != null)
+			{
+				_player.addSkill(windStrike, true);
+				LOGGER.info("Added Wind Strike skill to mage autobot: " + _player.getName());
+			}
+			else
+			{
+				LOGGER.warning("Wind Strike skill (1177) not found for autobot: " + _player.getName());
+			}
+		}
+		catch (Exception e)
+		{
+			LOGGER.warning("Error adding Wind Strike skill: " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Equip starting items based on race and class type
+	 */
+	private void equipStartingItems()
+	{
+		try
+		{
+			org.l2jmobius.gameserver.model.actor.enums.creature.Race race = _playerClass.getRace();
+			boolean isMage = _playerClass.isMage();
+			
+			// Equipment IDs based on race and class
+			int weaponId;
+			int chestId;
+			int legsId;
+			
+			if (isMage)
+			{
+				// Mage equipment
+				switch (race)
+				{
+					case HUMAN:
+					case ELF:
+					case DARK_ELF:
+						weaponId = 6; // Apprentice's Wand
+						chestId = 425; // Apprentice's Tunic
+						legsId = 461; // Apprentice's Stockings
+						break;
+					case ORC:
+						weaponId = 2368; // Training Gloves
+						chestId = 425; // Apprentice's Tunic
+						legsId = 461; // Apprentice's Stockings
+						break;
+					default:
+						weaponId = 6; // Default: Apprentice's Wand
+						chestId = 425; // Apprentice's Tunic
+						legsId = 461; // Apprentice's Stockings
+						break;
+				}
+			}
+			else
+			{
+				// Fighter equipment
+				switch (race)
+				{
+					case HUMAN:
+					case ELF:
+					case DARK_ELF:
+						weaponId = 2369; // Squire's Sword
+						chestId = 1146; // Squire's Shirt
+						legsId = 1147; // Squire's Pants
+						break;
+					case DWARF:
+						weaponId = 2370; // Guild Member's Club
+						chestId = 1146; // Squire's Shirt
+						legsId = 1147; // Squire's Pants
+						break;
+					case ORC:
+						weaponId = 2368; // Training Gloves
+						chestId = 1146; // Squire's Shirt
+						legsId = 1147; // Squire's Pants
+						break;
+					default:
+						weaponId = 2369; // Default: Squire's Sword
+						chestId = 1146; // Squire's Shirt
+						legsId = 1147; // Squire's Pants
+						break;
+				}
+			}
+			
+			// Create and equip items
+			equipItem(weaponId, "weapon");
+			equipItem(chestId, "chest");
+			equipItem(legsId, "legs");
+			
+			LOGGER.info("Equipped starting items for " + _player.getName() + " (" + race + ", " + 
+				(isMage ? "Mage" : "Fighter") + "): Weapon " + weaponId + ", Chest " + chestId + ", Legs " + legsId);
+		}
+		catch (Exception e)
+		{
+			LOGGER.warning("Error equipping starting items for autobot " + _player.getName() + ": " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Helper method to create and equip an item
+	 */
+	private void equipItem(int itemId, String slotName)
+	{
+		try
+		{
+			// Get item template
+			org.l2jmobius.gameserver.model.item.ItemTemplate template = 
+				org.l2jmobius.gameserver.data.xml.ItemData.getInstance().getTemplate(itemId);
+			
+			if (template != null)
+			{
+				// Create item instance using ItemManager
+				org.l2jmobius.gameserver.model.item.instance.Item item = 
+					org.l2jmobius.gameserver.managers.ItemManager.createItem(
+						org.l2jmobius.gameserver.model.item.enums.ItemProcessType.QUEST, itemId, 1, _player, null);
+				
+				if (item != null)
+				{
+					// Add to inventory using correct process type
+					_player.getInventory().addItem(
+						org.l2jmobius.gameserver.model.item.enums.ItemProcessType.QUEST, 
+						itemId, 1, _player, null);
+					
+					// Equip the item
+					_player.getInventory().equipItem(item);
+					
+					LOGGER.fine("Equipped " + slotName + " item " + itemId + " (" + template.getName() + ") for " + _player.getName());
+				}
+				else
+				{
+					LOGGER.warning("Failed to create item instance for " + slotName + " (ID: " + itemId + ") for " + _player.getName());
+				}
+			}
+			else
+			{
+				LOGGER.warning("Item template not found for " + slotName + " (ID: " + itemId + ") for " + _player.getName());
+			}
+		}
+		catch (Exception e)
+		{
+			LOGGER.warning("Error equipping " + slotName + " item " + itemId + " for " + _player.getName() + ": " + e.getMessage());
 		}
 	}
 	
@@ -218,16 +402,26 @@ public class Autobot
 	}
 	
 	/**
-	 * Handle chat message to this autobot
+	 * Handle chat message to this autobot - DISABLED
 	 */
 	public void handleChatMessage(String message, Player sender, ChatType chatType)
 	{
-		LOGGER.info("Autobot " + getName() + " received message from " + sender.getName() + ": " + message);
-		
-		// Simple auto-response
-		if (message.toLowerCase().contains("hello"))
+		// Chat interactions disabled to prevent unwanted social behavior
+		// Autobots will focus solely on combat and farming
+		return;
+	}
+	
+	/**
+	 * Handle party invitation - always decline to prevent party formation
+	 */
+	public void handlePartyInvitation(Player inviter)
+	{
+		if (inviter != null)
 		{
-			_player.sendMessage("Hello " + sender.getName() + "!");
+			LOGGER.info("Autobot " + getName() + " declining party invitation from " + inviter.getName());
+			// Send decline response
+			_player.broadcastPacket(new org.l2jmobius.gameserver.network.serverpackets.CreatureSay(
+				_player, ChatType.GENERAL, _player.getName(), "Sorry, I prefer to hunt alone!"));
 		}
 	}
 	
@@ -289,6 +483,18 @@ public class Autobot
 	}
 	
 	/**
+	 * Get current AI state for debugging
+	 */
+	public String getAIState()
+	{
+		if (_autobotAI != null)
+		{
+			return _autobotAI.getCurrentState().toString();
+		}
+		return "NO_AI";
+	}
+	
+	/**
 	 * Set online status
 	 */
 	public void setOnline(boolean online)
@@ -308,6 +514,20 @@ public class Autobot
 			
 			// Make sure it's visible to other players
 			_player.broadcastUserInfo();
+			
+			// Ensure AI is properly initialized and connected
+			if (_autobotAI != null)
+			{
+				_player.setAI(_autobotAI);
+				// Start AI thinking process and set to farming mode
+				_player.getAI().setIntention(org.l2jmobius.gameserver.ai.Intention.ACTIVE);
+				_autoFarmEnabled = true; // Force enable auto farming
+				
+				// Prevent party formation - ensure no party
+				_player.setParty(null);
+				
+				LOGGER.info("AutobotAI initialized and activated for: " + getName());
+			}
 			
 			LOGGER.info("Autobot " + getName() + " spawned at " + _homeLocation);
 		}
@@ -339,5 +559,49 @@ public class Autobot
 		{
 			_player.deleteMe();
 		}
+	}
+	
+	/**
+	 * Check if autobot died and handle despawning
+	 */
+	public void checkDeathStatus()
+	{
+		if (_player != null && _player.isDead() && _isOnline)
+		{
+			LOGGER.info("Autobot " + getName() + " has died and will be despawned permanently");
+			
+			// Mark as offline to prevent further processing
+			_isOnline = false;
+			
+			// Schedule despawn with a short delay to allow death animation
+			org.l2jmobius.commons.threads.ThreadPool.schedule(() -> {
+				// Remove from AutobotManager
+				org.l2jmobius.gameserver.managers.AutobotManager.getInstance().despawnAutobot(getName());
+			}, 3000); // 3 second delay
+		}
+	}
+	
+	/**
+	 * Get aggression level
+	 */
+	public int getAggressionLevel()
+	{
+		if (_autobotAI != null)
+		{
+			return _autobotAI.getAggressionLevel();
+		}
+		return 50;
+	}
+	
+	/**
+	 * Get social level
+	 */
+	public int getSocialLevel()
+	{
+		if (_autobotAI != null)
+		{
+			return _autobotAI.getSocialLevel();
+		}
+		return 30;
 	}
 }

@@ -3336,7 +3336,7 @@ public abstract class Creature extends WorldObject
 				final int y = yPrev + y1;
 				if (!GeoEngine.getInstance().canMoveToTarget(xPrev, yPrev, zPrev, x, y, zPrev, getInstanceWorld()))
 				{
-					_move.onGeodataPathIndex = -1;
+					move.onGeodataPathIndex = -1;
 					stopMove(asPlayer().getLastServerPosition());
 					return true;
 				}
@@ -3357,7 +3357,7 @@ public abstract class Creature extends WorldObject
 					final int y = yPrev + y1;
 					if (!GeoEngine.getInstance().canMoveToTarget(xPrev, yPrev, zPrev, x, y, zPrev, getInstanceWorld()))
 					{
-						_move.onGeodataPathIndex = -1;
+						move.onGeodataPathIndex = -1;
 						if (hasAI())
 						{
 							if (getAI().isFollowing())
@@ -3385,7 +3385,7 @@ public abstract class Creature extends WorldObject
 						final int y = yPrev + y1;
 						if (!GeoEngine.getInstance().canMoveToTarget(xPrev, yPrev, zPrev, x, y, zPrev, getInstanceWorld()))
 						{
-							_move.onGeodataPathIndex = -1;
+							move.onGeodataPathIndex = -1;
 							broadcastPacket(new StopMove(this));
 							return true;
 						}
@@ -3410,7 +3410,7 @@ public abstract class Creature extends WorldObject
 								if ((hasDoors && DoorData.getInstance().checkIfDoorsBetween(xPrev, yPrev, zPrev, x, y, zPrev, getInstanceWorld(), false)) //
 									|| (hasFences && FenceData.getInstance().checkIfFenceBetween(xPrev, yPrev, zPrev, x, y, zPrev, getInstanceWorld())))
 								{
-									_move.onGeodataPathIndex = -1;
+									move.onGeodataPathIndex = -1;
 									if (hasAI())
 									{
 										if (getAI().isFollowing())
